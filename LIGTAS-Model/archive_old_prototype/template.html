@@ -1,0 +1,687 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LIGTAS-CASCADE Model</title>
+<style>
+:root{
+  --bg:#fbfaf7; --panel:#ffffff; --fg:#1d2327; --muted:#5d686f; --line:#e3e0d8;
+  --accent:#0f6b73; --accent-soft:#dcefef; --warn:#a4570b; --warn-soft:#fbeedb;
+  --risk0:#2f8f6b; --risk1:#d9a528; --risk2:#c4412b; --grid:#ece9e1;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#14181b; --panel:#1b2125; --fg:#e8ecee; --muted:#9aa6ad; --line:#2d363b;
+    --accent:#58c1c9; --accent-soft:#17363a; --warn:#f0b062; --warn-soft:#3a2b16;
+    --risk0:#4fbf93; --risk1:#e3b84a; --risk2:#ee6b52; --grid:#252d32;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+header{padding:56px 0 28px;border-bottom:1px solid var(--line)}
+.eyebrow{font:600 12px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:clamp(30px,5vw,48px);line-height:1.1;margin:14px 0 14px;letter-spacing:-.02em}
+.lede{font-size:19px;color:var(--muted);max-width:760px;margin:0}
+nav{position:sticky;top:0;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:5}
+nav .wrap{display:flex;gap:18px;overflow-x:auto;padding:10px 20px;white-space:nowrap}
+nav a{color:var(--muted);text-decoration:none;font-size:14px}
+nav a:hover{color:var(--accent)}
+section{padding:44px 0 8px}
+h2{font-size:26px;margin:0 0 6px;letter-spacing:-.01em}
+h2 + .sub{color:var(--muted);margin:0 0 22px}
+h3{font-size:17px;margin:26px 0 8px}
+p{margin:0 0 14px}
+.callout{border:1px solid var(--line);border-left:4px solid var(--warn);background:var(--warn-soft);padding:14px 18px;border-radius:8px;margin:22px 0}
+.callout b:first-child{color:var(--warn)}
+.callout.ok{border-left-color:var(--accent);background:var(--accent-soft)}
+.callout.ok b:first-child{color:var(--accent)}
+.grid{display:grid;gap:14px}
+.g4{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.stat{font:700 30px/1.1 system-ui;letter-spacing:-.02em}
+.stat small{display:block;font:500 13px/1.4 system-ui;color:var(--muted);margin-top:6px;letter-spacing:0}
+table{width:100%;border-collapse:collapse;font-size:14.5px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:12.5px;text-transform:uppercase;letter-spacing:.05em}
+td.n{font-variant-numeric:tabular-nums;text-align:right}
+th.n{text-align:right}
+tr.hl td{background:var(--accent-soft)}
+.tablewrap{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:10px}
+code,.mono{font-family:var(--mono);font-size:.88em}
+code{background:var(--accent-soft);padding:1px 6px;border-radius:4px}
+a{color:var(--accent)}
+svg text{font-family:system-ui,sans-serif;fill:var(--muted);font-size:12px}
+svg .ttl{fill:var(--fg);font-weight:600}
+.chart{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 14px 8px}
+.chart h3{margin:0 0 2px}
+.chart .cap{color:var(--muted);font-size:14px;margin:0 0 8px}
+.tag{display:inline-block;font:600 11px/1 var(--mono);padding:4px 7px;border-radius:5px;background:var(--accent-soft);color:var(--accent);margin-right:6px;vertical-align:1px}
+.tag.w{background:var(--warn-soft);color:var(--warn)}
+ol.refs{padding-left:22px;font-size:14.5px}
+ol.refs li{margin-bottom:9px}
+.leg{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin:4px 0 6px}
+.leg i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+footer{padding:36px 0 60px;color:var(--muted);font-size:14px;border-top:1px solid var(--line);margin-top:40px}
+details{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 16px;margin:10px 0}
+summary{cursor:pointer;font-weight:600}
+@media (max-width:600px){ .wrap{padding:0 16px} header{padding-top:36px} }
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="eyebrow">LIGTAS · thesis model proposal · prototype run on the Test Route dataset</div>
+  <h1>LIGTAS-CASCADE</h1>
+  <p style="font:600 15px/1.4 system-ui;margin:0 0 16px;color:var(--fg)">Utilizing Isolation Forest and XGBoost Algorithms in Forecasting Anomalous Trip Behavior as a Commuter Safety Indicator</p>
+  <p class="lede">A staged model that turns bare <b>latitude, longitude and timestamps</b> into a forward-looking <b>Safety Index</b> for a commuter's next 60 seconds. An Isolation Forest defines what “abnormal for this place and time” means; XGBoost learns to forecast it; an explanation layer says why.</p>
+</div></header>
+<nav><div class="wrap">
+  <a href="#data">Data</a><a href="#model">Model</a><a href="#why">Why it is justified</a><a href="#results">Results</a><a href="#strong">Round 2</a><a href="#v3">Round 3</a><a href="#v4">Round 4</a><a href="#limits">What this does not show</a><a href="#columns">Columns to add</a><a href="#refs">References</a>
+</div></nav>
+
+<main class="wrap">
+
+<div class="callout"><b>Read this first.</b> The Test Route dataset is synthetic and has no safety labels. “Safety” in this prototype therefore means <i>forward anomalous-behaviour risk</i>: the chance that the vehicle’s motion in the next 60 s is abnormal for that road position and time of day. It is a proxy. It becomes a true commuter-safety model only after incident or perceived-safety labels are added (see <a href="#columns">Columns to add</a>).</div>
+
+<section id="data">
+  <h2>1 · What the data gives us</h2>
+  <p class="sub">Everything below is computed from the 60 CSV files in <code>01-test-route</code>.</p>
+  <div class="grid g4" id="datastats"></div>
+  <h3>What the data tells us about model design</h3>
+  <ul id="dataimplications"></ul>
+</section>
+
+<section id="model">
+  <h2>2 · The model</h2>
+  <p class="sub">Four stages. Stages 1 and 2 learn; stage 0 prepares the features and stage 3 turns the forecast into something a commuter can read.</p>
+  <div class="chart" style="padding:10px">
+  <svg viewBox="0 0 960 360" width="100%" role="img" aria-label="Pipeline diagram">
+    <defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--muted)"/></marker></defs>
+    <g id="pipe"></g>
+  </svg></div>
+
+  <div class="grid g2" style="margin-top:18px">
+    <div class="card"><span class="tag">STAGE 0</span><b>Kinematic and map-matched features</b>
+      <p style="margin:8px 0 0;color:var(--muted)">From each 10-s fix: speed, acceleration, jerk, turn rate, dwell time (seconds stationary), 60-s rolling statistics, and the vehicle’s along-route position <code>s</code> and cross-track offset <code>d</code> from the route polyline. Time features: local hour, day of week, elapsed trip time. Only past and present samples are used.</p></div>
+    <div class="card"><span class="tag">STAGE 1</span><b>Context-conditioned Isolation Forest (the “teacher”)</b>
+      <p style="margin:8px 0 0;color:var(--muted)">Instead of asking “is this speed unusual?”, it asks “is this speed unusual <i>here, at this time of day</i>?”. A residual <code>v − median(v | 100 m bin, direction, am/pm)</code> is added to the forest’s inputs, so a stop at a traffic light is normal and the same stop mid-block is not. The top 10 % of training scores define an <i>anomalous moment</i>.</p></div>
+    <div class="card"><span class="tag">STAGE 2</span><b>Forward-risk XGBoost (the “student”)</b>
+      <p style="margin:8px 0 0;color:var(--muted)">Target: will any of the next 6 samples (60 s) be an anomalous moment? Inputs: Stage-0 features, the Stage-1 score, and a leave-own-trip-out <i>segment memory</i> (smoothed historical anomaly rate of that 100 m bin). This turns detection into prediction.</p></div>
+    <div class="card"><span class="tag">STAGE 3</span><b>Safety Index and explanation</b>
+      <p style="margin:8px 0 0;color:var(--muted)"><code>Safety Index = 100 × (1 − p)</code>, where <i>p</i> is the forecast probability. Per-prediction reasons come from XGBoost’s built-in tree-SHAP contributions. A Platt-scaling step is included but only used when enough validation data exists (see Results).</p></div>
+  </div>
+
+  <h3>How this differs from “Isolation Forest, then XGBoost on the same features”</h3>
+  <ol>
+    <li><b>The forest is contextual.</b> It scores deviation from the local norm, not from the global distribution.</li>
+    <li><b>XGBoost forecasts; it does not re-detect.</b> The label sits in the future (t+10 s … t+60 s), so the supervised model must learn what precedes anomalies.</li>
+    <li><b>Validation is blocked by trip and time.</b> Train on earlier trips, test on later ones, so a trip never straddles the split.</li>
+    <li><b>Every component carries an ablation.</b> The results below show which parts earned their place on this dataset.</li>
+  </ol>
+</section>
+
+<section id="why">
+  <h2>3 · Why each choice is justified by the literature</h2>
+  <p class="sub">Each row ties a design decision to a source. Source details and caveats are in <a href="#refs">References</a>.</p>
+  <div class="tablewrap"><table id="whytable"></table></div>
+</section>
+
+<section id="results">
+  <h2>4 · Results on the Test Route</h2>
+  <p class="sub" id="splitinfo"></p>
+
+  <div class="chart">
+    <h3>Ablation: which components help?</h3>
+    <p class="cap">PR-AUC for predicting an anomalous moment in the next 60 s. Dots are the single chronological test split; bars are the mean of five rolling-origin folds (whiskers = one standard deviation across folds). The no-skill line is the test base rate.</p>
+    <div class="leg"><span><i style="background:var(--accent)"></i>Rolling-origin mean ± SD</span><span><i style="background:var(--risk1)"></i>Single test split</span></div>
+    <div id="ablation"></div>
+  </div>
+
+  <div class="callout ok"><b>What the numbers support.</b> <span id="findings"></span></div>
+
+  <div class="tablewrap"><table id="restable"></table></div>
+
+  <div class="grid g2" style="margin-top:18px">
+    <div class="chart"><h3>Where the risk sits on the route</h3>
+      <p class="cap">Share of moments in each 100 m bin that were followed by an anomalous moment within 60 s (all 60 trips; descriptive, not a test result).</p>
+      <div id="routemap"></div></div>
+    <div class="chart"><h3>Risk along the route, with speed</h3>
+      <p class="cap">Bars: forward-risk rate. Line: median speed (km/h).</p>
+      <div id="routeprofile"></div></div>
+  </div>
+
+  <div class="chart" style="margin-top:18px"><h3 id="demotitle">One held-out trip</h3>
+    <p class="cap">Safety Index (higher is safer) against speed. Red ticks mark moments that actually preceded an anomaly within 60 s; the grey band marks moments that were themselves anomalous.</p>
+    <div id="timeline"></div></div>
+
+  <div class="grid g2" style="margin-top:18px">
+    <div class="chart"><h3>What drives the forecast</h3>
+      <p class="cap">Mean |SHAP contribution| (log-odds) on the test split. Cross-track offset ranks first because the synthetic trips include U-turns and mini-detours off the main polyline; treat it as a generator artifact, not a finding.</p><div id="shap"></div></div>
+    <div class="chart"><h3>Calibration on the test split</h3>
+      <p class="cap">Forecast probability vs observed frequency, in five equal-count bins. The dashed diagonal is perfect calibration.</p>
+      <div class="leg"><span><i style="background:var(--accent)"></i>Raw XGBoost</span><span><i style="background:var(--risk2)"></i>After Platt scaling</span></div>
+      <div id="calib"></div></div>
+  </div>
+</section>
+
+
+<section id="strong">
+  <h2>5 · Strengthening round (v2)</h2>
+  <p class="sub">Second pass after a literature search and review of the Edwards &amp; Hosein (2025) deviation scheme. The evidence is now an <b>injected-anomaly benchmark</b> with exact ground truth, not just the model’s own label.</p>
+
+  <div class="callout"><b>What changed.</b> New features: history-based and route-polyline deviation with the Edwards &amp; Hosein bands, heading deviation, sustained off-route time, excess and unexpected dwell. New safeguards: a persistence baseline, a rule-based label channel independent of the forest, a rotated Isolation Forest, threshold and seed sensitivity, and a cold-start curve. All numbers below come from <code>pipeline2.py</code> and six rolling-origin folds (train on earlier trips, test on the next six).</div>
+
+  <h3>5.1 Injected-anomaly benchmark</h3>
+  <p>Known abnormal events were planted into held-out trips (the protocol used by recent trajectory-anomaly papers, which insert detours and speed changes and keep the injection record as ground truth). Detours are scaled to the three Edwards &amp; Hosein bands; stops of 90 s and 180 s are placed where trips rarely stop; speed changes are ±50 % for 80 s. Each cell is the <b>AUC</b> at fix level against <span id="nneg"></span> clean fixes. Darker = better; 0.50 is chance.</p>
+  <div class="tablewrap"><table id="injauc"></table></div>
+  <h3>Detection rate at a fixed 5 % false-alarm rate</h3>
+  <div class="tablewrap"><table id="injtpr"></table></div>
+  <div class="callout ok"><b>What this supports.</b> <span id="injfind"></span></div>
+
+  <h3>5.2 Does the forecast give early warning?</h3>
+  <p id="leadtext"></p>
+
+  <h3>5.3 Forecast against a naive baseline, on three targets</h3>
+  <p class="cap" style="color:var(--muted)">PR-AUC for “event within the next 60 s”, mean ± SD over six folds. The persistence baseline simply says “an event is happening now, so another follows”. The rule-based target is defined without the forest, so it is not circular.</p>
+  <div class="tablewrap"><table id="abl2"></table></div>
+
+  <div class="grid g2" style="margin-top:18px">
+    <div class="chart"><h3>Sensitivity to the 90th-percentile cutoff</h3>
+      <p class="cap">The event rate sets the label’s base rate, so raw PR-AUC rises with it. Lift over base rate and the gap to persistence are the fair comparison.</p>
+      <div class="tablewrap" style="border:none"><table id="senstab"></table></div>
+      <p id="stabtext" style="margin-top:12px"></p></div>
+    <div class="chart"><h3>Cold start: how many trips are enough?</h3>
+      <p class="cap">Trained on N earlier trips, tested on the last 12 (mean of three random subsets).</p>
+      <div class="leg"><span><i style="background:var(--accent)"></i>Forecast PR-AUC</span><span><i style="background:var(--risk1)"></i>IF detection (TPR @5% FPR)</span><span><i style="background:var(--risk2)"></i>Fusion detection</span></div>
+      <div id="cold"></div></div>
+  </div>
+
+  <h3>5.4 What the deviation bands showed on your data</h3>
+  <p id="bandtext"></p>
+
+  <div class="grid g2" style="margin-top:18px">
+    <div class="chart"><h3>Injected 750 m detour (major band)</h3><p class="cap">Detector percentile scores along one held-out trip. Grey = injected window.</p><div id="demo1"></div></div>
+    <div class="chart"><h3>Injected 180 s unscheduled stop</h3><p class="cap">Same detectors. The forest and excess dwell react; route deviation does not.</p><div id="demo2"></div></div>
+  </div>
+  <div class="leg" style="margin-top:8px"><span><i style="background:var(--accent)"></i>Isolation Forest v2</span><span><i style="background:var(--risk1)"></i>History deviation</span><span><i style="background:var(--risk2)"></i>Excess dwell</span><span><i style="background:var(--fg)"></i>XGBoost forecast</span></div>
+
+  <h3>5.5 Revised recommendation</h3>
+  <ol id="recs"></ol>
+</section>
+
+
+<section id="v3">
+  <h2>6 · Third round (v3): weak spots, ordinal levels, calibration, uncertainty</h2>
+  <p class="sub">Same six rolling-origin folds. Code: <code>pipeline3.py</code>. Each item below says plainly whether it helped.</p>
+
+  <h3>6.1 The known weak spots: did the fixes work?</h3>
+  <div class="tablewrap"><table id="v3fix"></table></div>
+  <h3 style="margin-top:22px">Time-aware baseline, tested</h3>
+  <p>The baseline now varies by road stretch, direction and hour block (night, morning peak, midday, afternoon peak), with shrinkage toward the all-day baseline where a block has few trips. Detection of planted events by baseline type (AUC / detected at 5 % false alarms):</p>
+  <div class="tablewrap"><table id="v3base"></table></div>
+  <p id="v3basetext" style="margin-top:10px"></p>
+
+  <h3>6.2 Ordinal concern level: Normal, Minor, Major, Critical</h3>
+  <p>The level of any moment is the worst of three signals: statistical unusualness (forest score above the 90th, 97.5th or 99.5th training percentile), route deviation (Edwards &amp; Hosein bands), and excess dwell (30, 90 or 180 s). The model forecasts the <b>worst level in the next 60 s</b> using three cumulative XGBoost models, “level ≥ Minor”, “≥ Major”, “≥ Critical” (Frank &amp; Hall, 2001), turned into one level using thresholds tuned on the validation trips.</p>
+  <div class="tablewrap"><table id="v3ord"></table></div>
+  <div class="grid g2" style="margin-top:14px">
+    <div class="chart"><h3>What the forecast said vs what happened</h3><p class="cap">Rows = actual worst level in the next 60 s, columns = forecast. Counts over all held-out fixes.</p><div class="tablewrap" style="border:none"><table id="v3conf"></table></div></div>
+    <div class="chart"><h3>Current level of planted events</h3><p class="cap">Share of event fixes assigned each level right now. Detours were planted at the three band sizes.</p><div class="tablewrap" style="border:none"><table id="v3lvl"></table></div></div>
+  </div>
+  <div class="callout ok"><b>Reading it.</b> <span id="v3ordtext"></span></div>
+
+  <h3>6.3 Calibration</h3>
+  <p>Calibration asks whether “60 % risk” means about 60 % of such moments really were followed by concern. Each calibrator was fitted only on <i>earlier</i> folds and tested on the next (Guo et al., 2017, for the ECE measure; Niculescu-Mizil &amp; Caruana, 2005, for the methods).</p>
+  <div class="grid g2">
+    <div class="tablewrap"><table id="v3cal"></table></div>
+    <div class="chart"><div class="leg"><span><i style="background:var(--muted)"></i>Raw</span><span><i style="background:var(--accent)"></i>Platt</span><span><i style="background:var(--risk1)"></i>Isotonic</span></div><div id="v3rel"></div></div>
+  </div>
+  <p id="v3caltext" style="margin-top:10px"></p>
+
+  <h3>6.4 Uncertainty</h3>
+  <p><b>Two tools.</b> (1) The spread of five XGBoost models trained on resampled trips. (2) <b>Conformal prediction</b>, which outputs a <i>set</i> of possible answers: “normal likely”, “concern likely”, or “uncertain” (both) so that the true answer is inside the set at least a chosen share of the time (Angelopoulos &amp; Bates, 2021). An adaptive version (Gibbs &amp; Candès, 2021) retunes itself as data drifts.</p>
+  <div class="grid g2">
+    <div class="tablewrap"><table id="v3ens"></table></div>
+    <div class="tablewrap"><table id="v3conf2"></table></div>
+  </div>
+  <p id="v3unctext" style="margin-top:10px"></p>
+
+  <h3>6.5 Real sample output (v3)</h3>
+  <p class="cap" style="color:var(--muted)">One held-out trip (every third fix). Full file: <code>sample_output_v3.csv</code>. Risk interval = ensemble mean ± 1 spread. Confidence set uses a 90 % target.</p>
+  <div class="tablewrap"><table id="v3sample" style="font-size:12.5px"></table></div>
+</section>
+
+
+<section id="v4">
+  <h2>7 · Fourth round (v4): speed changes and false alarms</h2>
+  <p class="sub">Run by <code>evaluate.py</code>, which now also serves as the verification tool. Every number here is from held-out trips and synthetic planted events.</p>
+
+  <div class="callout"><b>Read before using these numbers.</b> The big gains below come from a <b>supervised detector trained on planted events</b>. It was tested on magnitudes and event kinds it never saw, but the planted events and the test events come from the same generator, so this shows the idea can work, not that it transfers to real riders. It must be re-tested on real trips.</div>
+
+  <h3>7.1 What was added</h3>
+  <ul>
+    <li><b>Speed features:</b> sudden-ratio of recent to earlier moving speed, a moving-only speed z-score, acceleration sign changes, oscillation of route distance, reversal count. Added to the forest as “forest + speed features”.</li>
+    <li><b>Supervised detector:</b> XGBoost trained on clean training fixes versus fixes inside events planted in <i>training</i> trips only (detours, a 90 s stop, speed ×1.5 and ×0.5). Position and time-of-day features are excluded so it cannot memorise the route.</li>
+    <li><b>Hybrid:</b> alert if the forest or the supervised detector fires. The forest stays the catch-all for unknown unknowns; the supervised detector covers known families.</li>
+    <li><b>Budgeted alert policy:</b> the threshold is chosen on validation trips to meet a false-alarm budget (episodes per clean trip), and an alert needs two consecutive fixes.</li>
+  </ul>
+
+  <h3>7.2 Detection by group (mean AUC)</h3>
+  <div class="tablewrap"><table id="v4groups"></table></div>
+  <h3 style="margin-top:20px">Speed-related events, one by one (AUC / detected at 5 % false alarms)</h3>
+  <div class="tablewrap"><table id="v4speed"></table></div>
+  <div class="callout ok"><b>What this supports.</b> <span id="v4find"></span></div>
+
+  <h3>7.3 False alarms under a budget</h3>
+  <p>False alarms are measured on clean held-out trips (about 6 minutes each), so “1 per trip” is roughly 10 per hour. A rider-facing app would need a much lower budget.</p>
+  <div class="tablewrap"><table id="v4budget"></table></div>
+  <p id="v4budtext" style="margin-top:10px"></p>
+
+  <h3>7.4 Fixed-criteria checks</h3>
+  <div class="tablewrap"><table id="v4gates"></table></div>
+</section>
+
+<section id="limits">
+  <h2>8 · What this does not show</h2>
+  <p class="sub">The honest limits, so the thesis does not over-claim.</p>
+  <ul>
+    <li><b>No real safety signal.</b> The label is derived from the Isolation Forest itself, so XGBoost is largely learning to reproduce a rule. High PR-AUC means the anomaly is <i>predictable</i> from preceding motion; it does not mean the anomaly is <i>dangerous</i>.</li>
+    <li><b>The data is synthetic.</b> The generator places stops, U-turns and traffic lights at fixed route points. Persistent “hotspots” (for example the 900–1,100 m zone) are generator parameters, not risk discovered in the world.</li>
+    <li><b>10-second sampling hides harsh events.</b> Acceleration never leaves roughly −1.0 to +0.9 m/s², so the hard-braking and jerk thresholds used in bus-safety studies cannot trigger. Those studies sampled faster or used accelerometers.</li>
+    <li><b>Small, single-route, single-vehicle sample.</b> 60 trips, one tricycle route, daytime only (07:00–09:59 and 13:00–17:59 local). Fold-to-fold PR-AUC varies by about ±0.06–0.09, so differences under about 0.05 between XGBoost variants are noise.</li>
+    <li><b>The Isolation Forest score and segment memory did not add measurable skill</b> as extra XGBoost inputs here. The kinematic features already carry the same information. The forest’s value in this design is defining the label, not boosting the features.</li>
+    <li><b>Calibration needs more validation data.</b> With 9 validation trips, Platt scaling made calibration worse. It should be re-tested once real labels and more trips exist.</li>
+    <li><b>Speed anomalies are caught only by the supervised detector, and only on synthetic events.</b> The unsupervised forest still scores about chance-plus on them (AUC about 0.65). The supervised detector reaches about 0.86, but it learned from events planted by the same generator. Do not claim the model detects reckless speeding until it is tested on real trips.</li>
+    <li><b>The forest is not better than other unsupervised detectors.</b> Local Outlier Factor scores the same or slightly higher on average. The case for the forest is that it matches them, beats fixed rules on unseen event types, and is cheap to run.</li>
+    <li><b>False alarms are about one episode per six-minute clean trip</b> at the fixed Major level, and need a budget below about one per three trips to be tolerable. Real trips will differ.</li>
+    <li><b>Early warning is weak and only where a run-up exists.</b> Sudden planted events were not anticipated at all. When a stop or detour built up gradually, the 60 s before it scored about 0.6–0.7 AUC (chance 0.5). Forecast skill on the forest label shows predictable structure in normal trips, not warning of dangerous events.</li>
+    <li><b>Fusion did not beat the forest alone.</b> Max-rank fusion of the forest, history deviation and excess dwell lost to the forest on most injected types and degraded at low trip counts.</li>
+    <li><b>Night is absent.</b> A time-of-day risk effect (documented in survey work) cannot be learned from daytime-only trips.</li>
+  </ul>
+</section>
+
+<section id="columns">
+  <h2>9 · Columns that would make this a real safety model</h2>
+  <p class="sub">None are required to run the prototype. Ranked by how much they change the thesis claim.</p>
+  <div class="tablewrap"><table>
+    <tr><th>Priority</th><th>Column / file</th><th>Why</th></tr>
+    <tr><td><span class="tag w">1</span></td><td><code>incident_flag</code> (and <code>incident_type</code>) per trip or per timestamp</td><td>Gives XGBoost a real supervised target (near-miss, crash, harassment, theft) so the forest becomes a feature or auditor instead of the label maker. This is the single change that turns the proxy into commuter safety.</td></tr>
+    <tr><td><span class="tag w">2</span></td><td><code>perceived_safety</code> (1–5) per trip, from rider survey</td><td>Cheaper than incident data and directly measures commuter feeling; usable as an ordinal target.</td></tr>
+    <tr><td><span class="tag">3</span></td><td><code>passenger_count</code> or <code>occupancy</code> per timestamp</td><td>The manifest hints at passenger minimums. Crowding and lone-rider status change exposure.</td></tr>
+    <tr><td><span class="tag">3</span></td><td><code>rider_profile</code> (e.g. sex, age band; anonymised)</td><td>The Philippine literature reports gendered risk, so a model can be checked for fairness across groups.</td></tr>
+    <tr><td><span class="tag">4</span></td><td>Night and wet-season trips; <code>weather</code>, <code>lighting</code></td><td>Current data is daytime only. Timestamps can derive lighting, but trips must exist at night.</td></tr>
+    <tr><td><span class="tag">4</span></td><td>More routes and vehicle types (jeepney, UV Express, bus)</td><td>One route cannot test spatial generalisation. Needed for leave-one-route-out validation.</td></tr>
+    <tr><td><span class="tag">5</span></td><td>Faster sampling (1–2 s) or accelerometer</td><td>Makes harsh-braking and jerk features meaningful.</td></tr>
+  </table></div>
+  <p style="margin-top:12px;color:var(--muted)">Metadata already present in <code>project.json</code> but not in the CSVs: vehicle type, stop types (passenger, traffic light, pedestrian crossing), and U-turn points. These are generator settings, so use them only to inspect results, never as model inputs for real data.</p>
+</section>
+
+<section id="refs">
+  <h2>10 · References</h2>
+  <p class="sub">Found through web search in this session. “Read” means the abstract or search summary was checked; <b>no full text was read</b>, so confirm details and page numbers before citing in the manuscript.</p>
+  <ol class="refs" id="reflist"></ol>
+</section>
+
+<section>
+  <h2>11 · Reproduce</h2>
+  <details open><summary>Command</summary>
+<pre class="mono" style="overflow-x:auto;margin:10px 0 4px">python3 pipeline.py  /path/to/01-test-route results.json      # v1 baseline
+python3 pipeline2.py /path/to/01-test-route results_v2.json   # v2 (about 2 minutes)
+python3 pipeline3.py /path/to/01-test-route results_v3.json sample_output_v3.csv   # v3 (about 5 minutes)
+python3 evaluate.py /path/to/01-test-route [--labels labels.csv]   # verification report (about 30 seconds)
+python3 build.py        # embeds results.json into ligtas-cascade.html</pre>
+  <p style="color:var(--muted);margin:6px 0 0">Requires numpy, pandas, scikit-learn, xgboost. Random seed 7. Isolation Forest: 300 trees, 256 samples. XGBoost: depth 3, learning rate 0.04, early stopping on the validation trips, no class re-weighting.</p></details>
+</section>
+</main>
+<footer><div class="wrap">Prototype for the LIGTAS thesis. Figures are generated from <code>results.json</code>, produced by <code>pipeline.py</code> on the dataset in this folder. AI-assisted analysis: all numbers should be re-run and verified by the author before inclusion in the manuscript.</div></footer>
+
+<script>
+const R = __DATA__;
+const R2 = __DATA2__;
+const R3 = __DATA3__;
+const R4 = __DATA4__;
+const $ = id => document.getElementById(id);
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const f2 = x => (x==null||isNaN(x))?'–':x.toFixed(2), f3 = x => (x==null||isNaN(x))?'–':x.toFixed(3);
+const S = R.summary;
+
+/* ---------- data cards ---------- */
+$('datastats').innerHTML = [
+  [S.n_trips, `trips (${S.dir_counts['A→B']} A→B, ${S.dir_counts['B→A']} B→A)`],
+  [S.n_points.toLocaleString(), `GPS fixes at ${S.sampling_s}-second intervals`],
+  [S.speed_p50_kmh+' km/h', `median speed (95th pct ${S.speed_p95_kmh}); ${(S.stopped_frac*100).toFixed(0)}% of fixes stationary`],
+  [S.accel_min+' to +'+S.accel_max, 'acceleration range in m/s²']
+].map(([a,b])=>`<div class="card"><div class="stat">${a}<small>${b}</small></div></div>`).join('');
+$('dataimplications').innerHTML = [
+ `<b>No labels.</b> The CSVs hold only <code>timestamp, latitude, longitude</code>. The model must create its own target, which is why an unsupervised stage comes first.`,
+ `<b>One route, one vehicle type</b> (${S.vehicles.join(', ')}), ${S.route_len_m.toLocaleString()} m long. Position along the route is therefore a usable feature here but would not transfer to a new route.`,
+ `<b>Coarse sampling.</b> Ten seconds between fixes smooths out sudden events, so anomalies are defined by pattern (where, how long, how irregular), not by peak g-force.`,
+ `<b>Time structure.</b> Trips run ${S.train_period[0]} to ${S.test_period[1]}, in morning and afternoon windows. The split below is chronological: train ${S.train_period[0]} → ${S.train_period[1]}, test ${S.test_period[0]} → ${S.test_period[1]}.`
+].map(x=>`<li>${x}</li>`).join('');
+
+/* ---------- pipeline diagram ---------- */
+(function(){
+  const g=$('pipe'); const bx=[
+   ['Raw input','timestamp','latitude · longitude',20,'var(--panel)'],
+   ['Stage 0','Kinematics +','map-matching',205,'var(--panel)'],
+   ['Stage 1','Context-conditioned','Isolation Forest',390,'var(--accent-soft)'],
+   ['Stage 2','Forward-risk','XGBoost',575,'var(--accent-soft)'],
+   ['Stage 3','Safety Index','+ SHAP reasons',760,'var(--panel)']];
+  let h='';
+  bx.forEach((b,i)=>{
+    h+=`<rect x="${b[3]}" y="40" width="165" height="98" rx="10" fill="${b[4]}" stroke="var(--line)"/>
+    <text class="ttl" x="${b[3]+14}" y="68" style="font-size:12px;fill:var(--accent)">${b[0]}</text>
+    <text class="ttl" x="${b[3]+14}" y="94" style="font-size:14px">${b[1]}</text>
+    <text class="ttl" x="${b[3]+14}" y="114" style="font-size:14px">${b[2]}</text>`;
+    if(i<4) h+=`<line x1="${b[3]+166}" y1="89" x2="${b[3]+203}" y2="89" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#ah)"/>`;
+  });
+  // annotations
+  const notes=[[287,'speed, accel, jerk, turn,','dwell, s, d, hour'],[472,'score each fix vs the','local norm → top 10% = event'],[657,'P(event within next 60 s)','+ IF score + segment memory']];
+  notes.forEach(n=>{ h+=`<text x="${n[0]}" y="168" text-anchor="middle">${n[1]}</text><text x="${n[0]}" y="184" text-anchor="middle">${n[2]}</text>`;});
+  // feedback: teacher defines label
+  h+=`<path d="M472 138 C472 250, 657 250, 657 138" fill="none" stroke="var(--risk1)" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#ah)"/>
+      <text x="565" y="262" text-anchor="middle" style="fill:var(--warn);font-weight:600">Teacher → label: “event in t+10 … t+60 s?”</text>
+      <text x="565" y="280" text-anchor="middle">forest fitted on training trips only</text>`;
+  h+=`<rect x="20" y="310" width="905" height="34" rx="8" fill="none" stroke="var(--line)" stroke-dasharray="4 4"/>
+      <text x="472" y="332" text-anchor="middle">Validation: chronological split by trip, plus rolling-origin folds (earlier trips train, later trips test)</text>`;
+  g.innerHTML=h;
+})();
+
+/* ---------- why table ---------- */
+const refs = [
+ ['liu','Liu, F. T., Ting, K. M., & Zhou, Z.-H. (2008). Isolation Forest. <i>Proc. IEEE ICDM</i>, 413–422.','https://doi.org/10.1109/ICDM.2008.17','Isolates anomalies instead of profiling normal points; linear time and low memory, which suits small per-route datasets and later scale-up.'],
+ ['eif','Hariri, S., Carrasco Kind, M., & Brunner, R. J. (2021). Extended Isolation Forest. <i>IEEE TKDE</i> (arXiv:1811.02141).','https://arxiv.org/abs/1811.02141','Shows axis-aligned splits create score artifacts. Motivates checking the forest’s scores and trying the extended variant with real data.'],
+ ['xgb','Chen, T., & Guestrin, C. (2016). XGBoost: A scalable tree boosting system. <i>KDD ’16</i>.','https://arxiv.org/abs/1603.02754','Sparsity-aware, regularised gradient boosting; the standard tabular learner.'],
+ ['shap','Lundberg, S. M., & Lee, S.-I. (2017). A unified approach to interpreting model predictions. <i>NeurIPS</i>.','https://arxiv.org/abs/1705.07874','Additive feature attribution; used for per-prediction reasons. (TreeSHAP specifics were not confirmed in search; verify before citing.)'],
+ ['cal','Niculescu-Mizil, A., & Caruana, R. (2005). Predicting good probabilities with supervised learning. <i>ICML</i>, 625–632.','https://doi.org/10.1145/1102351.1102430','Boosted trees distort probabilities; calibration (Platt or isotonic) helps, and Platt is safer when data is scarce.'],
+ ['rob','Roberts, D. R., et al. (2017). Cross-validation strategies for data with temporal, spatial, hierarchical, or phylogenetic structure. <i>Ecography</i>, 40(8), 913–929.','https://doi.org/10.1111/ecog.02881','Random CV underestimates error on structured data; use blocked CV by time, location or group.'],
+ ['bus','Li, P., Abdel-Aty, M., & Yuan, J. (2021). Using bus critical driving events as surrogate safety measures for pedestrian and bicycle crashes based on GPS trajectory data. <i>Accident Analysis &amp; Prevention</i>, 150, 105924.','https://doi.org/10.1016/j.aap.2020.105924','Hard acceleration, hard deceleration and long stops, derived from GPS trajectories, correlate with pedestrian and cyclist crashes. Long stops correlated most strongly.'],
+ ['jerk','Longitudinal jerk and celeration as measures of safety in bus rapid transit drivers in Tehran (Cranfield repository).','https://dspace.lib.cranfield.ac.uk/handle/1826/15073','Deceleration, jerk and celeration derived from smartphone speed correlated with culpable crashes (176 drivers; small sample).'],
+ ['drive','Unsupervised learning for detection of rare driving scenarios (arXiv:2512.23585).','https://arxiv.org/html/2512.23585','Deep Isolation Forest flags rare, hazardous scenarios in naturalistic driving, evaluated against a proxy ground truth. Closest precedent for forest-as-hazard-detector.'],
+ ['traj','Anomalous behavior detection in trajectory data of older drivers (arXiv:2311.17822).','https://arxiv.org/pdf/2311.17822','Isolation Forest anomaly scores applied to trip trajectories without labels.'],
+ ['pseudo','Hybrid deep learning for anomaly detection in mental-healthcare billing (arXiv:2507.01924).','https://arxiv.org/pdf/2507.01924','Isolation Forest and autoencoder scores create pseudo-labels for a downstream supervised model when only 0.4 % of cases are labelled.'],
+ ['aaid','AnomalyAID: reliable interpretation for semi-supervised network anomaly detection (arXiv:2411.11293).','https://arxiv.org/pdf/2411.11293','Two-stage pseudo-labelling that keeps labels only when stages agree. Motivates adding an agreement check once a second detector is available.'],
+ ['chi','A comparative analysis of multiple methods for predicting a specific type of crime in Chicago (arXiv:2304.13464).','https://arxiv.org/pdf/2304.13464','XGBoost on spatial and temporal features alone performed best (reported F1 0.86). Supports space-time-only inputs.'],
+ ['geo','Data Science for Public Policy: felony prediction project (Georgetown).','https://troy-yu-cheng.github.io/final-project','XGBoost on latitude, longitude, date and time with a train-on-earlier, test-on-later split; notes transit hubs raise some offence risk. Course project, not peer reviewed.'],
+ ['stock','Individual, travel, and bus stop characteristics influencing travelers’ safety perceptions (TU Delft).','https://research.tudelft.nl/en/publications/individual-travel-and-bus-stop-characteristics-influencing-travel','Perceived safety varies with time of day, stop design and rider characteristics; supports hour as a feature and rider profile as a future column.'],
+ ['irl','Passenger Personal Security Report 2024 (Ireland, National Transport Authority).','https://www.nationaltransport.ie/wp-content/uploads/2025/04/Passenger-Personal-Security-Report-2024.pdf','Survey finding that public transport feels safer at commuter hours than late evening and overnight. Not Philippine; context only.'],
+ ['dlsu','Modified feminist self-defense: violence against women in transit in Metro Manila (DLSU, PIDS webinar slides, 2023).','https://pidswebs.pids.gov.ph/CDN/document/March-2-2023-webinar-SERP-P-DLSU-Empowerment-Feminist-Self-Defense.pdf','Philippine context: gendered risk in jeepneys, buses and trains. Method slides only; final findings not confirmed.'],
+ ['sim','Evaluating validity of synthetic data in perception tasks for autonomous vehicles (SJSU).','https://scholarworks.sjsu.edu/faculty_rsca/26','General caution that models trained on synthetic data can fail to transfer; evidence is from perception, not tabular models.'],
+ ['edw','Edwards, K., & Hosein, P. (2025). A self-contained spatio-temporal anomaly detection application for travel safety. <i>2025 IEEE ICTMOD</i>, 1–6.','https://doi.org/10.1109/ICTMOD66732.2025.11371875','Source of the four deviation bands (normal ≤150 m, minor ≤500 m, major ≤1,000 m, critical &gt;1,000 m), measured as minimum distance to points of previous trips. Thresholds are “predefined”; the full text gives no empirical basis, and the test is four simulated scenarios on one route. Read in full.'],
+ ['ibat','iBAT: detecting anomalous taxi trajectories from GPS traces (UbiComp 2011); and iBOAT: isolation-based online anomalous trajectory detection (IEEE T-ITS, 2013).','https://hal.archives-ouvertes.fr/hal-01302049','Isolation-based detection of anomalous taxi routes; reported AUC above 0.99 on real taxi GPS. A follow-up deployment found over 60 % of anomalous trips were detours. Confirm authors and venues from the originals.'],
+ ['inj1','Graph Enhanced Trajectory Anomaly Detection (arXiv:2509.18386).','https://arxiv.org/pdf/2509.18386','Builds detour anomalies by removing and rerouting a segment and uses them as labelled test cases; motivates the injection benchmark.'],
+ ['inj2','Towards physics-informed diffusion for anomaly detection in trajectories (arXiv:2506.06999).','https://arxiv.org/pdf/2506.06999','Creates speed anomalies by perturbing time gaps, roughly ±50 %; motivates the speed-up and crawl injections.'],
+ ['stop1','Unsupervised abnormal stop detection for long-distance coaches with low-frequency GPS (arXiv:2411.04422).','https://arxiv.org/html/2411.04422v1','Treats rare, unexpected stops as the safety-relevant anomaly (illegal pickups); supports the excess-dwell feature.'],
+ ['stop2','Few-shot semi-supervised learning for abnormal stop detection from sparse GPS trajectories (arXiv:2510.12686).','https://ar5iv.labs.arxiv.org/html/2510.12686','Scores how far a stop’s duration deviates from the typical stay time in its segment; the same idea as excess dwell.'],
+ ['samp','Hard-braking detection from GPS in cycling (Sensors; PMC8234598).','https://pmc.ncbi.nlm.nih.gov/articles/PMC8234598','Concludes at least 1 Hz GPS is needed to detect hard braking. Supports the limitation that 10-second data cannot show harsh events. Confirm this is the correct paper before citing.'],
+ ['fh','Frank, E., & Hall, M. (2001). A simple approach to ordinal classification. <i>ECML 2001</i>, LNCS, 145–156.','https://link.springer.com/content/pdf/10.1007/3-540-44795-4_13.pdf','Turns a k-level ordinal problem into k−1 binary “is the level above x?” classifiers; used for the Minor/Major/Critical forecast.'],
+ ['ab','Angelopoulos, A. N., & Bates, S. (2021). A gentle introduction to conformal prediction and distribution-free uncertainty quantification (arXiv:2107.07511).','https://arxiv.org/abs/2107.07511','Introduction to prediction sets with a coverage guarantee; also covers time series and abstaining models.'],
+ ['aci','Gibbs, I., & Candès, E. (2021). Adaptive conformal inference under distribution shift. <i>NeurIPS</i> (arXiv:2106.00170).','https://arxiv.org/abs/2106.00170','Online update of the miscoverage level so long-run coverage holds when the data drifts; used for the adaptive sets.'],
+ ['guo','Guo, C., Pleiss, G., Sun, Y., & Weinberger, K. Q. (2017). On calibration of modern neural networks. <i>ICML</i> (arXiv:1706.04599).','https://arxiv.org/abs/1706.04599','Defines expected calibration error (ECE) as the weighted gap between confidence and accuracy over bins; used as the calibration measure. Neural-network paper; the metric is general.'],
+ ['cp','Conformal prediction algorithms for time series forecasting: methods and benchmarking (arXiv:2601.18509).','https://www.alphaxiv.org/abs/2601.18509','Standard conformal guarantees break on serially dependent data; listed as future work for uncertainty on the Safety Index.']
+];
+const idx = Object.fromEntries(refs.map((r,i)=>[r[0],i+1]));
+const cite = (...k)=>k.map(x=>`<a href="#ref-${x}">[${idx[x]}]</a>`).join(' ');
+$('reflist').innerHTML = refs.map(r=>`<li id="ref-${r[0]}">${r[1]} <a href="${r[2]}" target="_blank" rel="noopener">link</a><br><span style="color:var(--muted)">${r[3]}</span></li>`).join('');
+const why = [
+ ['Use an Isolation Forest to define abnormal motion without labels','Isolation-based scoring is label-free and cheap, and it has been used on driving and trajectory data.',cite('liu','traj','drive')],
+ ['Make the forest contextual (residual against the local norm)','Standard forests score deviation from the global cloud and show axis-aligned score artifacts; local baselines remove the “stops are always odd” bias. This is the novel step, not directly found in the sources.',cite('eif')],
+ ['Use stops, speed change and jerk-like features','GPS-derived hard acceleration, hard deceleration and long stops track real bus crashes, and jerk tracks culpable crashes.',cite('bus','jerk')],
+ ['Create pseudo-labels from the unsupervised score, then train a supervised model','The two-stage unsupervised-then-supervised pattern is established where labels are scarce.',cite('pseudo','aaid')],
+ ['Predict only from space and time features','XGBoost on location and time alone is competitive for crime-risk forecasting.',cite('chi','geo','xgb')],
+ ['Include hour and day of week','Perceived and recorded risk differ by time of day.',cite('stock','irl')],
+ ['Validate by trip, chronologically (rolling origin)','Random splits overstate accuracy on dependent data. Samples from one trip are highly autocorrelated.',cite('rob')],
+ ['Report probabilities, check calibration, prefer Platt on small data','Boosted trees distort probabilities and Platt is safer than isotonic when data is scarce.',cite('cal')],
+ ['Explain each prediction with SHAP contributions','A safety score for commuters must say why it fired.',cite('shap')],
+ ['Measure deviation from the route in four bands (150 / 500 / 1,000 m)','A published four-level scheme from lat/lon/time on public transport; thresholds are design choices, not validated risk limits.',cite('edw')],
+ ['Compare against taxi-style isolation baselines for route deviation','Isolation-based methods detect anomalous routes well on real taxi GPS; most anomalies there are detours.',cite('ibat')],
+ ['Add excess and unexpected dwell','Unexpected stops are treated as safety-relevant anomalies, scored against the typical stay time per segment.',cite('stop1','stop2','bus')],
+ ['Evaluate with injected anomalies and exact ground truth','With no labels, planted detours and speed changes are the common protocol; they test detection, not real-world danger.',cite('inj1','inj2')],
+ ['Treat 10-second sampling as a limit, not a feature','Hard-braking detection is reported to need about 1 Hz GPS.',cite('samp')],
+ ['Forecast an ordinal concern level, not just yes/no','Cumulative binary classifiers give ordered levels with any standard learner.',cite('fh')],
+ ['Check calibration with ECE on later folds; fit calibrators on earlier folds','Reliability is measured by binned confidence-versus-accuracy gaps.',cite('guo','cal')],
+ ['Report prediction sets, with an adaptive variant','Conformal sets state when the model is unsure; adaptive updates cope with drift.',cite('ab','aci')],
+ ['Treat the synthetic result as a pipeline test only','Models trained on synthetic data may not transfer.',cite('sim')],
+ ['Frame the target and columns for the Philippine setting','Gendered transit risk is documented in Metro Manila; supports adding rider profile and incident labels.',cite('dlsu')]
+];
+$('whytable').innerHTML = '<tr><th style="width:34%">Design decision</th><th>Why</th><th style="width:70px">Sources</th></tr>'+why.map(w=>`<tr><td>${w[0]}</td><td>${w[1]}</td><td>${w[2]}</td></tr>`).join('');
+
+/* ---------- results ---------- */
+$('splitinfo').textContent = `Train ${S.n_train} trips · validation ${S.n_val} trips · test ${S.n_test} trips (${R.main.n_test} fixes, ${R.main.n_pos} positives, base rate ${(R.main.base_rate*100).toFixed(0)}%). Event threshold τ = ${f3(R.params.tau)} (90th percentile of training scores).`;
+const order = ['IF only (current score)','XGBoost, no IF','XGBoost + IF score (no segment memory)','XGBoost + segment memory (no IF score)','LIGTAS-CASCADE (raw)','LIGTAS-CASCADE (calibrated)'];
+const label = {'IF only (current score)':'Isolation Forest alone (score as predictor)','XGBoost, no IF':'XGBoost, kinematics + time only','XGBoost + IF score (no segment memory)':'XGBoost + IF score','XGBoost + segment memory (no IF score)':'XGBoost + segment memory','LIGTAS-CASCADE (raw)':'LIGTAS-CASCADE (full), raw probabilities','LIGTAS-CASCADE (calibrated)':'LIGTAS-CASCADE (full), Platt-calibrated'};
+(function ablation(){
+  const rows = order.filter(k=>k!=='LIGTAS-CASCADE (calibrated)');
+  const W=900, rh=44, top=14, left=300, H=top+rows.length*rh+40;
+  const x = v => left + v*(W-left-30);
+  let h=`<svg viewBox="0 0 ${W} ${H}" width="100%">`;
+  for(let t=0;t<=1.0001;t+=.2){ h+=`<line x1="${x(t)}" x2="${x(t)}" y1="${top-4}" y2="${H-26}" stroke="var(--grid)"/><text x="${x(t)}" y="${H-8}" text-anchor="middle">${t.toFixed(1)}</text>`;}
+  const br=R.main.base_rate;
+  h+=`<line x1="${x(br)}" x2="${x(br)}" y1="${top-4}" y2="${H-26}" stroke="var(--muted)" stroke-dasharray="4 3"/><text x="${x(br)+4}" y="${top+6}" style="font-size:11px">no skill (${br.toFixed(2)})</text>`;
+  rows.forEach((k,i)=>{
+    const y=top+i*rh+10, c=R.cvsum[k], m=R.main.rows[k].prauc, full=k==='LIGTAS-CASCADE (raw)';
+    h+=`<text x="${left-12}" y="${y+14}" text-anchor="end" style="${full?'fill:var(--fg);font-weight:600':''}">${label[k]}</text>`;
+    h+=`<rect x="${left}" y="${y}" width="${x(c.prauc)-left}" height="20" rx="3" fill="var(--accent)" opacity="${full?1:.62}"/>`;
+    h+=`<line x1="${x(Math.max(0,c.prauc-c.prauc_sd))}" x2="${x(Math.min(1,c.prauc+c.prauc_sd))}" y1="${y+10}" y2="${y+10}" stroke="var(--fg)" stroke-width="1.6"/>`;
+    h+=`<circle cx="${x(m)}" cy="${y+10}" r="6" fill="var(--risk1)" stroke="var(--panel)" stroke-width="2"/>`;
+    h+=`<text x="${x(Math.min(1,c.prauc+c.prauc_sd))+10}" y="${y+14}" style="fill:var(--fg)">${f2(c.prauc)}</text>`;
+  });
+  $('ablation').innerHTML=h+'</svg>';
+})();
+(function table(){
+  const th='<tr><th>Model</th><th class="n">PR-AUC<br>test split</th><th class="n">ROC-AUC<br>test split</th><th class="n">PR-AUC<br>5-fold mean ± SD</th><th class="n">ROC-AUC<br>5-fold mean</th><th class="n">PR-AUC<br>onset only*</th><th class="n">Brier</th><th class="n">ECE</th></tr>';
+  const body=order.map(k=>{const r=R.main.rows[k], c=R.cvsum[k]; const full=k==='LIGTAS-CASCADE (raw)';
+   return `<tr class="${full?'hl':''}"><td>${label[k]}</td><td class="n">${f3(r.prauc)}</td><td class="n">${f3(r.roc)}</td><td class="n">${f3(c.prauc)} ± ${f2(c.prauc_sd)}</td><td class="n">${f3(c.roc)}</td><td class="n">${f3(r.prauc_onset)}</td><td class="n">${f3(r.brier)}</td><td class="n">${f3(r.ece)}</td></tr>`}).join('');
+  $('restable').innerHTML=th+body+`<tr><td colspan="8" style="color:var(--muted);font-size:13px">*Onset: only moments that are normal now, so the model must warn before an anomaly begins, not extend one already in progress (${R.main.onset_n} fixes, ${R.main.onset_pos} positives). Brier and ECE: lower is better. ECE uses 8 equal-count bins.</td></tr>`;
+  const M=R.main.rows, C=R.cvsum;
+  $('findings').innerHTML = `Forecasting beats scoring: every XGBoost variant reaches about ${f2(Math.min(...order.slice(1,5).map(k=>C[k].prauc)))}–${f2(Math.max(...order.slice(1,5).map(k=>C[k].prauc)))} PR-AUC across folds against ${f2(C['IF only (current score)'].prauc)} for the forest’s own score, so the next 60 s is predictable from the motion that came before. <b>But</b> the four XGBoost variants differ by less than the fold-to-fold spread (SD about ${f2(C['LIGTAS-CASCADE (raw)'].prauc_sd)}), so on this dataset the IF score and segment memory are not shown to help as <i>features</i>. Raw probabilities were better calibrated than Platt-scaled ones (ECE ${f3(M['LIGTAS-CASCADE (raw)'].ece)} vs ${f3(M['LIGTAS-CASCADE (calibrated)'].ece)}).`;
+})();
+
+/* route views */
+function riskColor(v){ // 0..1
+  const a=[47,143,107], b=[217,165,40], c=[196,65,43]; const t=Math.min(1,v/0.8);
+  const m=t<.5?[a,b,t*2]:[b,c,(t-.5)*2];
+  return `rgb(${m[0].map((q,i)=>Math.round(q+(m[1][i]-q)*m[2])).join(',')})`;
+}
+(function routemap(){
+  const G=R.geometry, bins=Object.fromEntries(R.route_bins.map(b=>[b.bin,b]));
+  const lonK=111320*Math.cos(18.056*Math.PI/180), latK=110574;
+  const X=G.lon.map(v=>v*lonK), Y=G.lat.map(v=>-v*latK);
+  const minx=Math.min(...X),maxx=Math.max(...X),miny=Math.min(...Y),maxy=Math.max(...Y);
+  const W=460, pad=18, sc=(W-2*pad)/(maxx-minx), H=Math.round((maxy-miny)*sc+2*pad);
+  const px=i=>pad+(X[i]-minx)*sc, py=i=>pad+(Y[i]-miny)*sc;
+  let h=`<svg viewBox="0 0 ${W} ${H}" width="100%">`;
+  for(let i=0;i<X.length-1;i++){
+    const sb=Math.floor(((G.cum[i]+G.cum[i+1])/2)/100); const b=bins[sb]; const v=b?b.fwd_rate:0;
+    h+=`<line x1="${px(i)}" y1="${py(i)}" x2="${px(i+1)}" y2="${py(i+1)}" stroke="${riskColor(v)}" stroke-width="5" stroke-linecap="round"><title>${sb*100}–${sb*100+100} m: ${(v*100).toFixed(0)}%</title></line>`;
+  }
+  h+=`<circle cx="${px(0)}" cy="${py(0)}" r="6" fill="var(--fg)"/><text x="${px(0)+9}" y="${py(0)+4}" style="fill:var(--fg)">A</text>`;
+  const n=X.length-1; h+=`<circle cx="${px(n)}" cy="${py(n)}" r="6" fill="var(--fg)"/><text x="${px(n)+9}" y="${py(n)+4}" style="fill:var(--fg)">B</text>`;
+  $('routemap').innerHTML=h+`</svg><div class="leg"><span><i style="background:${riskColor(0)}"></i>low</span><span><i style="background:${riskColor(.4)}"></i>medium</span><span><i style="background:${riskColor(.8)}"></i>high</span></div>`;
+})();
+(function routeprofile(){
+  const B=R.route_bins, W=470, H=250, l=40, r=36, t=14, b=34, bw=(W-l-r)/B.length;
+  const y=v=>t+(H-t-b)*(1-v), ys=v=>t+(H-t-b)*(1-v/40);
+  let h=`<svg viewBox="0 0 ${W} ${H}" width="100%">`;
+  [0,.25,.5,.75,1].forEach(v=>{h+=`<line x1="${l}" x2="${W-r}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)"/><text x="${l-6}" y="${y(v)+4}" text-anchor="end">${(v*100)|0}%</text>`;});
+  [0,20,40].forEach(v=>{h+=`<text x="${W-r+6}" y="${ys(v)+4}">${v}</text>`;});
+  B.forEach((d,i)=>{h+=`<rect x="${l+i*bw+1}" y="${y(d.fwd_rate)}" width="${bw-2}" height="${(H-t-b)*d.fwd_rate}" rx="2" fill="${riskColor(d.fwd_rate)}"><title>${d.s0} m: ${(d.fwd_rate*100).toFixed(0)}% risk, ${d.speed_kmh} km/h, ${(d.stopped*100).toFixed(0)}% stopped</title></rect>`;});
+  h+=`<polyline fill="none" stroke="var(--fg)" stroke-width="1.6" points="${B.map((d,i)=>`${l+i*bw+bw/2},${ys(d.speed_kmh)}`).join(' ')}"/>`;
+  for(let m=0;m<=2500;m+=500) h+=`<text x="${l+(m/100)*bw}" y="${H-12}" text-anchor="middle">${m}</text>`;
+  h+=`<text x="${(l+W-r)/2}" y="${H-0}" text-anchor="middle">distance along route (m, A→B)</text></svg>`;
+  $('routeprofile').innerHTML=h;
+})();
+(function timeline(){
+  const d=R.demo; $('demotitle').textContent=`One held-out trip (${d.direction}, ${d.start} local)`;
+  const W=920,H=300,l=44,r=44,t=12,b=34, n=d.t.length, x=i=>l+(W-l-r)*i/(n-1), ys=v=>t+(H-t-b)*(1-v/100), yv=v=>t+(H-t-b)*(1-v/45);
+  let h=`<svg viewBox="0 0 ${W} ${H}" width="100%">`;
+  [0,25,50,75,100].forEach(v=>{h+=`<line x1="${l}" x2="${W-r}" y1="${ys(v)}" y2="${ys(v)}" stroke="var(--grid)"/><text x="${l-6}" y="${ys(v)+4}" text-anchor="end">${v}</text>`;});
+  [0,20,40].forEach(v=>{h+=`<text x="${W-r+6}" y="${yv(v)+4}">${v}</text>`;});
+  h+=`<text x="${l-6}" y="${t-2}" text-anchor="end" style="font-size:10px">Safety</text><text x="${W-r+6}" y="${t-2}" style="font-size:10px">km/h</text>`;
+  d.event.forEach((e,i)=>{ if(e) h+=`<rect x="${x(i)-(W-l-r)/(n-1)/2}" y="${t}" width="${(W-l-r)/(n-1)}" height="${H-t-b}" fill="var(--muted)" opacity=".18"/>`;});
+  h+=`<polyline fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="4 3" points="${d.speed_kmh.map((v,i)=>`${x(i)},${yv(v)}`).join(' ')}"/>`;
+  h+=`<polyline fill="none" stroke="var(--accent)" stroke-width="2.4" points="${d.safety.map((v,i)=>`${x(i)},${ys(v)}`).join(' ')}"/>`;
+  d.y.forEach((e,i)=>{ if(e) h+=`<line x1="${x(i)}" x2="${x(i)}" y1="${H-b+2}" y2="${H-b+12}" stroke="var(--risk2)" stroke-width="2.4"/>`;});
+  for(let s=0;s<=d.t[n-1];s+=60) { const i=d.t.findIndex(v=>v>=s); h+=`<text x="${x(i)}" y="${H-8}" text-anchor="middle">${s}s</text>`; }
+  $('timeline').innerHTML=h+`</svg><div class="leg"><span><i style="background:var(--accent)"></i>Safety Index (100 × (1 − p))</span><span><i style="background:var(--muted);opacity:.6"></i>Speed (dashed)</span><span><i style="background:var(--risk2)"></i>Anomaly followed within 60 s</span></div>`;
+})();
+(function shap(){
+  const nice={d:'cross-track offset',seg_prior:'segment memory',elapsed:'elapsed trip time',s:'position along route',hour:'hour of day',v_mean6:'mean speed (60 s)',dir:'direction',v:'speed',turn_sum6:'turning (60 s)',a_absmax6:'max |accel| (60 s)',v_resid:'speed vs local norm',jerk:'jerk',stops6:'stops (60 s)',v_std6:'speed variability',turn:'turn rate',a:'acceleration',a_min6:'min accel (60 s)',if_score:'IF anomaly score',dwell:'seconds stopped',dow:'day of week'};
+  const e=Object.entries(R.shap_abs).sort((a,b)=>b[1]-a[1]).slice(0,12), mx=e[0][1];
+  const W=460, rh=24, H=e.length*rh+10, l=150;
+  let h=`<svg viewBox="0 0 ${W} ${H}" width="100%">`;
+  e.forEach(([k,v],i)=>{h+=`<text x="${l-8}" y="${i*rh+16}" text-anchor="end">${nice[k]||k}</text><rect x="${l}" y="${i*rh+4}" width="${(W-l-50)*v/mx}" height="16" rx="3" fill="${k==='if_score'?'var(--risk1)':'var(--accent)'}"/><text x="${l+(W-l-50)*v/mx+6}" y="${i*rh+16}">${v.toFixed(2)}</text>`;});
+  $('shap').innerHTML=h+'</svg>';
+})();
+(function calib(){
+  const W=460,H=300,l=40,b=34,t=10,r=10, x=v=>l+(W-l-r)*v, y=v=>t+(H-t-b)*(1-v);
+  let h=`<svg viewBox="0 0 ${W} ${H}" width="100%">`;
+  [0,.25,.5,.75,1].forEach(v=>{h+=`<line x1="${l}" x2="${W-r}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)"/><text x="${l-6}" y="${y(v)+4}" text-anchor="end">${v}</text><text x="${x(v)}" y="${H-16}" text-anchor="middle">${v}</text>`;});
+  h+=`<line x1="${x(0)}" y1="${y(0)}" x2="${x(1)}" y2="${y(1)}" stroke="var(--muted)" stroke-dasharray="5 4"/>`;
+  const draw=(arr,c)=>{ h+=`<polyline fill="none" stroke="${c}" stroke-width="2" points="${arr.map(p=>`${x(p.pred)},${y(p.obs)}`).join(' ')}"/>`+arr.map(p=>`<circle cx="${x(p.pred)}" cy="${y(p.obs)}" r="5" fill="${c}"><title>predicted ${p.pred}, observed ${p.obs}, n=${p.n}</title></circle>`).join('');};
+  draw(R.rel_raw,'var(--accent)'); draw(R.rel,'var(--risk2)');
+  h+=`<text x="${(l+W-r)/2}" y="${H-1}" text-anchor="middle">forecast probability</text><text transform="rotate(-90 11 ${H/2})" x="11" y="${H/2}" text-anchor="middle">observed frequency</text>`;
+  $('calib').innerHTML=h+'</svg>';
+})();
+
+/* ================= v2 section ================= */
+(function(){
+  const K=R2.params.kinds, D=['if1','if2','rot','d_hist','d','excess_dwell','xgb','fusion'];
+  const dl={if1:'Isolation Forest, v1 features',if2:'Isolation Forest, v2 features',rot:'Rotated Isolation Forest',d_hist:'History deviation (Edwards &amp; Hosein)',d:'Route-polyline deviation',excess_dwell:'Excess dwell',xgb:'XGBoost forecast',fusion:'Max-rank fusion'};
+  const kl={detour_minor:'Detour 300 m (minor)',detour_major:'Detour 750 m (major)',detour_critical:'Detour 1,200 m (critical)',stop_90s:'Unscheduled stop 90 s',stop_180s:'Unscheduled stop 180 s',speed_up:'Speed ×1.5 for 80 s',crawl:'Crawl ×0.5 for 80 s'};
+  $('nneg').textContent=R2.n_neg.toLocaleString();
+  const shade=(v,lo)=>{const a=Math.max(0,(v-lo)/(1-lo));return `background:color-mix(in srgb, var(--accent) ${Math.round(a*62)}%, transparent)`;};
+  function heat(id,key,lo){
+    let h='<tr><th>Injected event</th>'+D.map(d=>`<th class="n" style="font-size:11px">${dl[d]}</th>`).join('')+'</tr>';
+    K.forEach(k=>{h+=`<tr><td>${kl[k]}</td>`+D.map(d=>{const v=R2.inj[k][d][key];return `<td class="n" style="${shade(v,lo)}">${isNaN(v)?'–':v.toFixed(2)}</td>`}).join('')+'</tr>';});
+    $(id).innerHTML=h;
+  }
+  heat('injauc','auc',0.5); heat('injtpr','tpr5',0);
+  const g=(k,d,m)=>R2.inj[k][d][m];
+  const det=['detour_minor','detour_major','detour_critical'], stp=['stop_90s','stop_180s'], spd=['speed_up','crawl'];
+  const mean=a=>a.reduce((x,y)=>x+y,0)/a.length;
+  const aucD=mean(det.map(k=>g(k,'if2','auc'))), aucS=mean(stp.map(k=>g(k,'if2','auc'))), aucV=mean(spd.map(k=>g(k,'if2','auc')));
+  const minTpr=g('detour_minor','if2','tpr5'), minTprH=g('detour_minor','d_hist','tpr5');
+  $('injfind').innerHTML=`The v2 forest detects planted detours (mean AUC ${aucD.toFixed(2)}) and unscheduled stops (${aucS.toFixed(2)}) well, and clearly beats the v1 forest on minor detours and stops. History deviation alone is the best detour detector (minor-band detour: ${minTprH.toFixed(2)} detected at 5% false alarms vs ${minTpr.toFixed(2)} for the forest), while excess dwell is the best stop detector. <b>Speed changes are the weak spot</b> (forest AUC ${aucV.toFixed(2)}), and max-rank fusion did not beat the forest on most event types. These are tests of detection on planted events, not proof that the events are unsafe.`;
+  const lead=[]; K.forEach(k=>lead.push(g(k,'xgb','lead_auc')));
+  const leadIF=[]; K.forEach(k=>leadIF.push(g(k,'if2','lead_auc')));
+  $('leadtext').innerHTML=`For each injected event, the six fixes (60 s) just before it were scored. The XGBoost forecast reached a lead-time AUC between ${Math.min(...lead).toFixed(2)} and ${Math.max(...lead).toFixed(2)} (chance is 0.50), and the forest score between ${Math.min(...leadIF).toFixed(2)} and ${Math.max(...leadIF).toFixed(2)}. <b>The injected-event test therefore gives no evidence of early warning.</b> That is partly by design, since planted detours have no run-up, but it means the title’s “forecasting” rests only on the forest-label forecast in 5.3, which predicts structure in normal driving.`;
+  // ablation v2
+  const T=Object.keys(R2.abl), rows=Object.keys(R2.abl[T[0]]);
+  let h='<tr><th>Model</th>'+T.map(t=>`<th class="n">${t}<br><span style="text-transform:none;font-weight:400">base rate ${(R2.base_rates[t]*100).toFixed(0)}%</span></th>`).join('')+'</tr>';
+  rows.forEach(r=>{h+=`<tr class="${r.startsWith('v2 full')?'hl':''}"><td>${r}</td>`+T.map(t=>{const m=R2.abl[t][r];return `<td class="n">${m.prauc.toFixed(3)} ± ${m.prauc_sd.toFixed(2)}</td>`}).join('')+'</tr>';});
+  h+=`<tr><td colspan="${T.length+1}" style="color:var(--muted);font-size:13px">Every XGBoost variant beats persistence by roughly 0.2–0.3 PR-AUC on all three targets, so the forecast adds real skill over “more of the same”. The four feature sets differ by less than the fold spread, so the new deviation and dwell features do not improve the forecast; their value shows in the injection benchmark above. Values are not comparable with the v1 table, because the teacher forest now uses the v2 features.</td></tr>`;
+  $('abl2').innerHTML=h;
+  // sensitivity
+  let st='<tr><th>Event rate</th><th class="n">Base</th><th class="n">Persistence</th><th class="n">XGBoost</th><th class="n">Lift</th></tr>';
+  R2.sens.forEach(x=>{st+=`<tr><td>top ${Math.round(x.Q*100)}%</td><td class="n">${x.base.toFixed(2)}</td><td class="n">${x.persist.toFixed(2)}</td><td class="n">${x.xgb.toFixed(2)}</td><td class="n">${x.lift.toFixed(1)}×</td></tr>`;});
+  $('senstab').innerHTML=st;
+  const S2=R2.stab;
+  $('stabtext').innerHTML=`<b>Forest stability.</b> Across five random seeds the top-10 % anomaly set overlaps by Jaccard ${S2.seed_jaccard.toFixed(2)} (score rank correlation ${S2.seed_spearman.toFixed(2)}); across 100, 300 and 600 trees, ${S2.trees_jaccard.toFixed(2)} (${S2.trees_spearman.toFixed(2)}). The ranking is stable; only the cutoff is a choice.`;
+  // cold start
+  (function(){
+    const C=R2.cold, W=470,H=250,l=40,r=14,t=12,b=34, xs=i=>l+(W-l-r)*i/(C.length-1), y=v=>t+(H-t-b)*(1-v);
+    let h2=`<svg viewBox="0 0 ${W} ${H}" width="100%">`;
+    [0,.25,.5,.75,1].forEach(v=>{h2+=`<line x1="${l}" x2="${W-r}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)"/><text x="${l-6}" y="${y(v)+4}" text-anchor="end">${v}</text>`;});
+    C.forEach((c,i)=>{h2+=`<text x="${xs(i)}" y="${H-14}" text-anchor="middle">${c.N}</text>`;});
+    h2+=`<text x="${(l+W-r)/2}" y="${H-1}" text-anchor="middle">training trips (N)</text>`;
+    [['prauc','var(--accent)'],['if_tpr','var(--risk1)'],['fusion_tpr','var(--risk2)']].forEach(([k,c])=>{
+      h2+=`<polyline fill="none" stroke="${c}" stroke-width="2.2" points="${C.map((q,i)=>`${xs(i)},${y(q[k])}`).join(' ')}"/>`+C.map((q,i)=>`<circle cx="${xs(i)}" cy="${y(q[k])}" r="4" fill="${c}"/>`).join('');});
+    $('cold').innerHTML=h2+'</svg>';
+  })();
+  // bands
+  const F=R2.facts, nn=F.n;
+  $('bandtext').innerHTML=`Applying the Edwards &amp; Hosein bands to the clean trips: measured against the <b>planned route line</b>, ${F.band_poly[0].toLocaleString()} fixes are normal, ${F.band_poly[1]} minor, and none major or critical (largest offset ${Math.round(F.max_d_poly)} m). Measured their way, against <b>points from earlier trips</b>, only ${F.band_hist[1]} of ${nn.toLocaleString()} fixes leave “normal” (largest ${Math.round(F.max_d_hist)} m). The two disagree because the generator repeats the same U-turns and mini-detours on every trip, so history treats them as habit. For the thesis: use the route line for “deviation from the intended route” and history for “deviation from this rider’s habit”, and say which one a figure uses. Major and critical bands only exist in the injection test until real trips deviate that far. Median spacing between fixes is about ${Math.round(F.median_step_m)} m.`;
+  // demo timelines
+  function tl(id,d){
+    const W=470,H=250,l=36,r=10,t=10,b=32,n=d.t.length, x=i=>l+(W-l-r)*i/(n-1), y=v=>t+(H-t-b)*(1-v);
+    let h2=`<svg viewBox="0 0 ${W} ${H}" width="100%">`;
+    [0,.5,1].forEach(v=>{h2+=`<line x1="${l}" x2="${W-r}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)"/><text x="${l-6}" y="${y(v)+4}" text-anchor="end">${v}</text>`;});
+    d.mask.forEach((m,i)=>{if(m) h2+=`<rect x="${x(i)-(W-l-r)/(n-1)/2}" y="${t}" width="${(W-l-r)/(n-1)}" height="${H-t-b}" fill="var(--muted)" opacity=".2"/>`;});
+    [['if2','var(--accent)',2.4],['d_hist','var(--risk1)',1.8],['excess_dwell','var(--risk2)',1.8],['xgb','var(--fg)',1.4]].forEach(([k,c,w])=>{
+      h2+=`<polyline fill="none" stroke="${c}" stroke-width="${w}" ${k==='xgb'?'stroke-dasharray="4 3"':''} points="${d[k].map((v,i)=>`${x(i)},${y(v)}`).join(' ')}"/>`;});
+    for(let s=0;s<=d.t[n-1];s+=120){const i=d.t.findIndex(v=>v>=s); if(i>=0) h2+=`<text x="${x(i)}" y="${H-12}" text-anchor="middle">${s}s</text>`;}
+    $(id).innerHTML=h2+'</svg>';
+  }
+  tl('demo1',R2.demo); tl('demo2',R2.demo_stop);
+  // recommendations
+  const best=(ks,ds)=>ds.map(d=>[d,mean(ks.map(k=>g(k,d,'tpr5')))]).sort((a,b)=>b[1]-a[1])[0];
+  $('recs').innerHTML=[
+    `<b>Headline detector: the v2 Isolation Forest</b> with deviation and dwell features. It was the most consistent across event types and held up best with few trips (cold-start panel).`,
+    `<b>Report two views of deviation</b> (route line and history) and use the Edwards &amp; Hosein bands as labelled categories, not as validated risk limits.`,
+    `<b>Keep XGBoost as the forecaster, but claim only what 5.3 shows:</b> it beats persistence on the forest label and on a rule-based label. Do not claim early warning of dangerous events.`,
+    `<b>Drop max-rank fusion</b> from the headline. It did not beat the forest alone. Revisit when real labels exist.`,
+    `<b>State the blind spots:</b> speed anomalies, harsh events (10 s sampling), night, other routes and vehicles.`,
+    `<b>When the new data arrives,</b> re-run <code>pipeline2.py</code> unchanged. The injection benchmark, the cold-start curve and the sensitivity table will all update, and the first test to repeat is whether the forecast beats persistence on the new trips.`
+  ].map(x=>`<li>${x}</li>`).join('');
+})();
+
+/* ================= v3 section ================= */
+(function(){
+  const mean=a=>a.reduce((x,y)=>x+y,0)/a.length, f2=x=>x==null||isNaN(x)?'–':x.toFixed(2), f3=x=>x==null||isNaN(x)?'–':x.toFixed(3);
+  const I3=R3.inj, I2=R2.inj, L=['Normal','Minor','Major','Critical'];
+  const kl={detour_minor:'Detour 300 m',detour_major:'Detour 750 m',detour_critical:'Detour 1,200 m',detour_drift_750:'Gradual detour 750 m',stop_90s:'Stop 90 s',stop_180s:'Stop 180 s',stop_runup_90s:'Stop 90 s with slow-down',speed_up:'Speed ×1.5',crawl:'Crawl ×0.5'};
+  const lead=k=>I3[k];
+  // fixes table
+  const rows=[
+   ['Speed anomalies (crawl ×0.5)', 'Time-aware robust speed score, rolling speed-shift detector', `Forest AUC ${f2(I2.crawl.if2.auc)} → ${f2(I3.crawl.if3.auc)}; speed-shift detector alone ${f2(I3.crawl.vz.auc)}`, 'Small gain. Still weak.'],
+   ['Speed anomalies (speed-up ×1.5)', 'Same', `Forest AUC ${f2(I2.speed_up.if2.auc)} → ${f2(I3.speed_up.if3.auc)}; detected at 5% false alarms ${f2(I3.speed_up.if3.tpr5)}`, 'No real change. Not fixed.'],
+   ['Early warning: stop with a slow-down first', 'Run-up features (speed trend, time since stop, distance to usual stop zones)', `Lead-time AUC: forest ${f2(I3.stop_runup_90s.if3.lead_auc)}, XGBoost ${f2(I3.stop_runup_90s.xgb.lead_auc)}, speed-shift ${f2(I3.stop_runup_90s.vz.lead_auc)} (chance 0.50)`, 'Weak signal where a run-up exists.'],
+   ['Early warning: gradual detour', 'Rate-of-change of route distance', `Lead-time AUC: forest ${f2(I3.detour_drift_750.if3.lead_auc)}, history deviation ${f2(I3.detour_drift_750.d_hist.lead_auc)}, XGBoost ${f2(I3.detour_drift_750.xgb.lead_auc)}`, 'Weak signal where a run-up exists.'],
+   ['Early warning: sudden events', 'Same features', `Lead-time AUC ${f2(Math.min(...['detour_minor','detour_major','detour_critical','stop_90s','stop_180s'].map(k=>I3[k].xgb.lead_auc)))}–${f2(Math.max(...['detour_minor','detour_major','detour_critical','stop_90s','stop_180s'].map(k=>I3[k].xgb.lead_auc)))} for XGBoost`, 'None. Sudden events cannot be anticipated.'],
+   ['Forecast skill on normal trips', 'All of the above', `PR-AUC ${f2(R3.fore['Minor-or-worse in next 60 s']['v2 features'].prauc)} (v2 features) → ${f2(R3.fore['Minor-or-worse in next 60 s']['v3 features (+run-up, time-aware)'].prauc)} (v3); persistence ${f2(R3.fore['Minor-or-worse in next 60 s']['Persistence (concern now → concern soon)'].prauc)}`, 'Better than persistence. The v2→v3 gain is inside the fold spread (±0.07 to 0.10).']
+  ];
+  document.getElementById('v3fix').innerHTML='<tr><th>Weak spot</th><th>What was tried</th><th>Result</th><th>Verdict</th></tr>'+rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td><b>${r[3]}</b></td></tr>`).join('');
+  // baseline ablation
+  const ks=['detour_minor','detour_drift_750','stop_90s','stop_180s','speed_up','crawl'], modes=[['none','One all-day baseline'],['ampm','Morning / afternoon (v2)'],['time','Time-aware, shrunk (v3)']];
+  document.getElementById('v3base').innerHTML='<tr><th>Event</th>'+modes.map(m=>`<th class="n">${m[1]}</th>`).join('')+'</tr>'+ks.map(k=>`<tr><td>${kl[k]}</td>`+modes.map(m=>{const r=R3.base_abl[m[0]][k];return `<td class="n">${f2(r.auc)} / ${f2(r.tpr5)}</td>`}).join('')+'</tr>').join('');
+  const B=R3.blocks; document.getElementById('v3basetext').innerHTML=`<b>No clear benefit on this data.</b> The time-aware version matches the morning/afternoon version almost exactly and is not consistently better than one all-day baseline (it is better for stops, slightly worse for minor detours). The data has no night trips and only ${(B['2']||0).toLocaleString()} midday fixes (morning ${(B['1']||0).toLocaleString()}, afternoon ${(B['3']||0).toLocaleString()}), so the hour blocks cannot differ much yet. This should be re-tested when night and weekend trips arrive.`;
+  // ordinal
+  const O=R3.ordinal, mm=['qwk','mae','acc','within1'], mn={qwk:'Quadratic kappa (higher better)',mae:'Mean level error (lower better)',acc:'Exact level correct',within1:'Within one level'};
+  document.getElementById('v3ord').innerHTML='<tr><th>Measure</th><th class="n">Ordinal model, tuned thresholds</th><th class="n">Same, default 0.5 thresholds</th><th class="n">Persistence (level now)</th><th class="n">Always “Normal”</th></tr>'+mm.map(m=>`<tr><td>${mn[m]}</td><td class="n"><b>${f3(O.model[m])}</b></td><td class="n">${f3(O.model_default05[m])}</td><td class="n">${f3(O.persistence[m])}</td><td class="n">${f3(O.all_normal[m])}</td></tr>`).join('')+`<tr><td>AUC for “≥ Minor / ≥ Major / ≥ Critical”</td><td class="n" colspan="4">${f2(O.auc_ge1)} / ${f2(O.auc_ge2)} / ${f2(O.auc_ge3)}</td></tr>`;
+  document.getElementById('v3conf').innerHTML='<tr><th></th>'+L.map(l=>`<th class="n">${l}</th>`).join('')+'</tr>'+O.confusion.map((r,i)=>`<tr><td><b>${L[i]}</b> (${O.true_dist[i]})</td>`+r.map((v,j)=>`<td class="n" style="${i===j?'background:var(--accent-soft)':''}">${v}</td>`).join('')+'</tr>').join('');
+  const kk=['detour_minor','detour_major','detour_critical','detour_drift_750','stop_90s','stop_180s','speed_up','crawl','clean'];
+  document.getElementById('v3lvl').innerHTML='<tr><th>Event</th>'+L.map(l=>`<th class="n">${l}</th>`).join('')+'</tr>'+kk.map(k=>`<tr><td>${kl[k]||'Clean trips'}</td>`+R3.lvl_tab[k].dist.map(v=>`<td class="n">${(v*100).toFixed(0)}%</td>`).join('')+'</tr>').join('');
+  document.getElementById('v3ordtext').innerHTML=`The ordinal forecast agrees with the actual level somewhat better than persistence (kappa ${f2(O.model.qwk)} vs ${f2(O.persistence.qwk)}) and is more often within one level (${(O.model.within1*100).toFixed(0)}% vs ${(O.persistence.within1*100).toFixed(0)}%), but it is <b>not</b> better on exact accuracy or mean level error, and it is poor at the top: the “≥ Critical” forecast has AUC ${f2(O.auc_ge3)}, and only ${O.confusion[3][3]} of ${O.true_dist[3]} true Critical moments were called Critical. The default 0.5 thresholds were clearly worse (kappa ${f2(O.model_default05.qwk)}), so thresholds must be tuned. For planted events, current levels track the planted size for detours (about 0.9 or more reach the expected level) but fail for speed changes (${(R3.lvl_tab.speed_up.at_least_expected*100).toFixed(0)}% and ${(R3.lvl_tab.crawl.at_least_expected*100).toFixed(0)}% reach even Minor).`;
+  // calibration
+  const C=R3.cal; document.getElementById('v3cal').innerHTML='<tr><th>Method</th><th class="n">Brier</th><th class="n">ECE</th><th class="n">Log loss</th></tr>'+Object.entries(C).map(([k,v])=>`<tr class="${k===R3.best_cal?'hl':''}"><td>${k}</td><td class="n">${f3(v.brier)}</td><td class="n">${f3(v.ece)}</td><td class="n">${f3(v.log_loss!==undefined?v.log_loss:v.logloss)}</td></tr>`).join('');
+  (function(){const W=420,H=280,l=38,r=10,t=10,b=34,x=v=>l+(W-l-r)*v,y=v=>t+(H-t-b)*(1-v);let h=`<svg viewBox="0 0 ${W} ${H}" width="100%">`;
+    [0,.25,.5,.75,1].forEach(v=>{h+=`<line x1="${l}" x2="${W-r}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid, #ece9e1)"/><text x="${l-6}" y="${y(v)+4}" text-anchor="end">${v}</text><text x="${x(v)}" y="${H-16}" text-anchor="middle">${v}</text>`;});
+    h+=`<line x1="${x(0)}" y1="${y(0)}" x2="${x(1)}" y2="${y(1)}" stroke="var(--muted)" stroke-dasharray="5 4"/>`;
+    [['Raw ensemble mean','var(--muted)'],['Platt scaling','var(--accent)'],['Isotonic','var(--risk1)']].forEach(([k,c])=>{const a=R3.reliab[k];h+=`<polyline fill="none" stroke="${c}" stroke-width="2" points="${a.map(p=>`${x(p.pred)},${y(p.obs)}`).join(' ')}"/>`+a.map(p=>`<circle cx="${x(p.pred)}" cy="${y(p.obs)}" r="4" fill="${c}"/>`).join('');});
+    h+=`<text x="${(l+W-r)/2}" y="${H-1}" text-anchor="middle">forecast probability</text>`;document.getElementById('v3rel').innerHTML=h+'</svg>';})();
+  document.getElementById('v3caltext').innerHTML=`<b>Calibration now helps.</b> With ${R3.params.n_oof_cal.toLocaleString()} later-fold test fixes, Platt scaling cuts ECE from ${f3(C['Raw ensemble mean'].ece)} to ${f3(C['Platt scaling'].ece)} and lowers Brier (${f3(C['Raw ensemble mean'].brier)} → ${f3(C['Platt scaling'].brier)}); isotonic is similar on ECE but much worse on log loss. This reverses the v1 result, where nine validation trips were too few. “Calibrated” still only means the 0–1 number matches how often <i>concern</i> followed, not how often danger occurred.`;
+  // uncertainty
+  document.getElementById('v3ens').innerHTML='<tr><th>Ensemble spread</th><th class="n">Fixes</th><th class="n">Brier</th><th class="n">Mean error</th></tr>'+R3.ens.map(e=>`<tr><td>${e.group}</td><td class="n">${e.n}</td><td class="n">${f3(e.brier)}</td><td class="n">${f3(e.mean_abs_err)}</td></tr>`).join('');
+  document.getElementById('v3conf2').innerHTML='<tr><th>Target coverage</th><th class="n">Actual</th><th class="n">Singleton sets</th><th class="n">Accuracy when singleton</th></tr>'+R3.conf_sweep.map(c=>`<tr><td>${(c.target*100).toFixed(0)}%</td><td class="n">${(c.coverage*100).toFixed(0)}%</td><td class="n">${(c.singleton_share*100).toFixed(0)}%</td><td class="n">${isNaN(c.singleton_acc)?'–':(c.singleton_acc*100).toFixed(0)+'%'}</td></tr>`).join('');
+  const cs=R3.conf_sweep;
+  document.getElementById('v3unctext').innerHTML=`<b>Ensemble spread is not a reliable warning:</b> errors are not clearly larger where the five models disagree. <b>Conformal sets work, with limits.</b> At the 90 % target, actual coverage was ${(cs[0].coverage*100).toFixed(0)}% (it held on average), ${(cs[0].singleton_share*100).toFixed(0)}% of moments got a single answer, and those single answers were right ${(cs[0].singleton_acc*100).toFixed(0)}% of the time; the rest were “uncertain”. Coverage varied by fold (${(Math.min(...R3.conf.map(c=>c.static_cov))*100).toFixed(0)}% to ${(Math.max(...R3.conf.map(c=>c.static_cov))*100).toFixed(0)}%), a reminder that guarantees assume the future resembles the past. At 80 % and 70 % targets coverage was ${(cs[1].coverage*100).toFixed(0)}% and ${(cs[2].coverage*100).toFixed(0)}%, with ${(cs[1].singleton_share*100).toFixed(0)}% and ${(cs[2].singleton_share*100).toFixed(0)}% single answers; at 60 % it was ${(cs[3].coverage*100).toFixed(0)}%, close to target. The adaptive version reached ${(R3.conf_sum.adaptive_cov*100).toFixed(0)}% at the 90 % target.`;
+  // sample
+  const S=R3.sample; document.getElementById('v3sample').innerHTML='<tr><th>Time</th><th class="n">km/h</th><th>Concern now</th><th class="n">Risk (60 s)</th><th class="n">Interval</th><th class="n">Safety Index</th><th class="n">P ≥Minor</th><th class="n">P ≥Major</th><th>Forecast level</th><th>Confidence</th><th>Actual worst</th></tr>'+S.map(r=>`<tr><td>${r.time_local.slice(11)}</td><td class="n">${r.speed_kmh}</td><td>${r.concern_now}</td><td class="n">${r.risk_next_60s.toFixed(2)}</td><td class="n">${r.risk_low.toFixed(2)}–${r.risk_high.toFixed(2)}</td><td class="n">${r.safety_index}</td><td class="n">${r.p_minor_or_worse.toFixed(2)}</td><td class="n">${r.p_major_or_worse.toFixed(2)}</td><td>${r.predicted_next_level}</td><td>${r.confidence_set}</td><td>${r.actual_worst_level_next_60s}</td></tr>`).join('');
+})();
+
+/* ================= v4 section ================= */
+(function(){
+  const $=id=>document.getElementById(id), f2=x=>x==null||isNaN(x)?'–':x.toFixed(2), pc=x=>x==null||isNaN(x)?'–':(x*100).toFixed(0)+'%';
+  const D=['forest','forest4','rules','lof','ocsvm','maxz','asd','hybrid'], DL=R4.dlab, G=['designed','speed_seen','speed_heldout','speed_newtype','unseen'];
+  const shade=(v)=>`background:color-mix(in srgb, var(--accent) ${Math.round(Math.max(0,(v-0.5)/0.5)*62)}%, transparent)`;
+  $('v4groups').innerHTML='<tr><th>Event group</th>'+D.map(d=>`<th class="n" style="font-size:11px">${DL[d]}</th>`).join('')+'</tr>'+G.map(g=>`<tr><td>${R4.gtitle[g]}</td>`+D.map(d=>`<td class="n" style="${shade(R4.groups[g][d])}">${f2(R4.groups[g][d])}</td>`).join('')+'</tr>').join('');
+  const SK=['speed_up','crawl','speed_1.25','speed_1.8','crawl_0.7','crawl_0.3','speed_jitter','brake_pulse'], SD=['forest','forest4','lof','ocsvm','asd','hybrid'];
+  $('v4speed').innerHTML='<tr><th>Event</th>'+SD.map(d=>`<th class="n" style="font-size:11px">${DL[d]}</th>`).join('')+'</tr>'+SK.map(k=>`<tr><td>${R4.klab[k]}</td>`+SD.map(d=>{const r=R4.detect[k][d];return `<td class="n" style="${shade(r.auc)}">${f2(r.auc)} / ${f2(r.tpr5)}</td>`}).join('')+'</tr>').join('');
+  const g=R4.groups;
+  $('v4find').innerHTML=`<b>Speed changes:</b> the forest scores ${f2(g.speed_heldout.forest)} on magnitudes it was never trained on, the supervised detector ${f2(g.speed_heldout.asd)}, and ${f2(g.speed_newtype.asd)} on new kinds of speed event (jitter, brake pulse), so the gain is not only memorised magnitudes. <b>The supervised detector alone is weaker on event types it never saw</b> (${f2(g.unseen.asd)} vs forest ${f2(g.unseen.forest)}; it is poor on loops and backtracking), while the <b>hybrid</b> keeps the forest’s coverage and adds the speed gain (${f2(g.unseen.hybrid)} on unseen types, ${f2(g.speed_newtype.hybrid)} on new speed kinds, ${f2(g.designed.hybrid)} on designed-for events). The extra speed features alone helped the forest only a little (${f2(g.speed_heldout.forest)} → ${f2(g.speed_heldout.forest4)}). Local Outlier Factor ties or beats the forest.`;
+  const BD=['forest','lof','asd','hybrid'], B=['0.25','0.5','1.0','2.0'];
+  let h='<tr><th>Detector</th><th class="n">Budget<br>(episodes / trip)</th><th class="n">Measured<br>on test trips</th><th class="n">Recall:<br>designed-for</th><th class="n">Recall:<br>speed, trained</th><th class="n">Recall:<br>speed, held-out</th><th class="n">Recall:<br>speed, new kinds</th><th class="n">Recall:<br>other unseen</th></tr>';
+  BD.forEach(d=>B.forEach((b,i)=>{const t=R4.budgets[d][b], r=t.group_recall;h+=`<tr><td>${i?'':DL[d]}</td><td class="n">${b}</td><td class="n">${f2(t.eps_per_trip)}</td><td class="n">${pc(r.designed)}</td><td class="n">${pc(r.speed_seen)}</td><td class="n">${pc(r.speed_heldout)}</td><td class="n">${pc(r.speed_newtype)}</td><td class="n">${pc(r.unseen)}</td></tr>`;}));
+  $('v4budget').innerHTML=h;
+  const bh=R4.budgets.hybrid['0.25'], bf=R4.budgets.forest['0.25'];
+  $('v4budtext').innerHTML=`<b>Budgets are approximately met</b> but not exactly: thresholds are set on only six validation trips, so the measured rate on test trips ranges from ${f2(Math.min(...BD.flatMap(d=>B.map(b=>R4.budgets[d][b].eps_per_trip/parseFloat(b)))))}× to ${f2(Math.max(...BD.flatMap(d=>B.map(b=>R4.budgets[d][b].eps_per_trip/parseFloat(b)))))}× the budget. At the strictest budget (0.25, about one false alarm per four trips) the hybrid still catches ${pc(bh.group_recall.designed)} of designed-for events, ${pc(bh.group_recall.speed_heldout)} of held-out speed changes and ${pc(bh.group_recall.unseen)} of unseen types, against ${pc(bf.group_recall.speed_heldout)} and ${pc(bf.group_recall.unseen)} for the forest alone.`;
+  $('v4gates').innerHTML='<tr><th>Check</th><th>Criterion (fixed before the run)</th><th>Result</th><th>Status</th></tr>'+R4.gates.map(x=>`<tr><td>${x.name}</td><td>${x.crit}</td><td>${x.val}</td><td><b style="color:${x.status==='PASS'?'var(--risk0)':x.status==='FAIL'?'var(--risk2)':'var(--muted)'}">${x.status}</b></td></tr>`).join('');
+})();
+</script>
+</body>
+</html>

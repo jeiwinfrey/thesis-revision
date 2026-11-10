@@ -1,0 +1,54 @@
+time_local,latitude,longitude,speed_kmh,risk,safety_index,unusualness_score,unusual_now,deviation_band,top_reasons,unusual_in_next_60s_actual
+2026-10-01 08:16:07,18.054544,120.564237,0.0,0.729,27.1,0.402,0,Normal,speed raises risk; position on route raises risk,1
+2026-10-01 08:16:17,18.054573,120.563739,19.0,0.201,79.9,0.541,1,Normal,distance from route line lowers risk; average speed (last 60 s) raises risk,0
+2026-10-01 08:16:27,18.054728,120.562962,30.3,0.122,87.8,0.391,0,Normal,distance from route line lowers risk; average speed (last 60 s) lowers risk,0
+2026-10-01 08:16:37,18.0549,120.562107,33.3,0.126,87.4,0.385,0,Normal,distance from route line lowers risk; average speed (last 60 s) lowers risk,0
+2026-10-01 08:16:47,18.05505,120.56134,29.8,0.115,88.5,0.363,0,Normal,distance from route line lowers risk; average speed (last 60 s) lowers risk,0
+2026-10-01 08:16:57,18.055169,120.560571,29.7,0.117,88.3,0.362,0,Normal,distance from route line lowers risk; average speed (last 60 s) lowers risk,0
+2026-10-01 08:17:07,18.055286,120.559945,24.3,0.113,88.7,0.359,0,Normal,distance from route line lowers risk; average speed (last 60 s) lowers risk,0
+2026-10-01 08:17:17,18.055412,120.559117,32.0,0.11,89.0,0.387,0,Normal,distance from route line lowers risk; average speed (last 60 s) lowers risk,0
+2026-10-01 08:17:27,18.05555,120.558132,37.9,0.106,89.4,0.391,0,Normal,distance from route line lowers risk; average speed (last 60 s) lowers risk,1
+2026-10-01 08:17:37,18.055635,120.557582,21.2,0.108,89.2,0.449,0,Normal,distance from route line lowers risk; speed lowers risk,1
+2026-10-01 08:17:47,18.055635,120.557582,0.0,0.431,56.9,0.415,0,Normal,speed raises risk; stopped where trips rarely stop raises risk,1
+2026-10-01 08:17:57,18.055635,120.557582,0.0,0.434,56.6,0.416,0,Normal,speed raises risk; stopped where trips rarely stop raises risk,1
+2026-10-01 08:18:07,18.055635,120.557582,0.0,0.498,50.2,0.415,0,Normal,speed raises risk; stopped where trips rarely stop raises risk,1
+2026-10-01 08:18:17,18.055663,120.557403,6.9,0.204,79.6,0.51,0,Normal,distance from route line lowers risk; average speed (last 60 s) raises risk,1
+2026-10-01 08:18:27,18.055062,120.556937,29.8,0.432,56.8,0.571,1,Normal,distance from route line raises risk; distance from earlier trips raises risk,1
+2026-10-01 08:18:37,18.054464,120.556551,28.0,0.482,51.8,0.572,1,Normal,distance from route line raises risk; distance from earlier trips raises risk,1
+2026-10-01 08:18:47,18.054464,120.556551,0.0,0.575,42.5,0.641,1,Normal,distance from route line raises risk; stopped where trips rarely stop raises risk,1
+2026-10-01 08:18:57,18.054464,120.556551,0.0,0.579,42.1,0.647,1,Normal,distance from route line raises risk; stopped where trips rarely stop raises risk,1
+2026-10-01 08:19:07,18.054808,120.556752,15.7,0.442,55.8,0.599,1,Normal,distance from route line raises risk; distance from earlier trips raises risk,1
+2026-10-01 08:19:17,18.055484,120.557243,32.8,0.382,61.8,0.576,1,Normal,distance from route line raises risk; average speed (last 60 s) lowers risk,1
+2026-10-01 08:19:27,18.055723,120.557008,13.1,0.131,86.9,0.51,0,Normal,distance from route line lowers risk; stopped where trips rarely stop lowers risk,1
+2026-10-01 08:19:37,18.055861,120.556097,35.1,0.122,87.8,0.497,0,Normal,distance from route line lowers risk; average speed (last 60 s) lowers risk,1
+2026-10-01 08:19:47,18.055953,120.555458,24.6,0.247,75.3,0.402,0,Normal,distance from route line raises risk; stopped where trips rarely stop lowers risk,1
+2026-10-01 08:19:57,18.055953,120.555458,0.0,0.425,57.5,0.455,0,Normal,stopped where trips rarely stop raises risk; speed raises risk,1
+2026-10-01 08:20:07,18.05604,120.554839,23.8,0.108,89.2,0.539,1,Normal,distance from route line lowers risk; average speed (last 60 s) lowers risk,1
+2026-10-01 08:20:17,18.056124,120.55423,23.5,0.112,88.8,0.387,0,Normal,distance from route line lowers risk; average speed (last 60 s) lowers risk,1
+2026-10-01 08:20:27,18.056209,120.553619,23.5,0.13,87.0,0.361,0,Normal,distance from route line lowers risk; average speed (last 60 s) lowers risk,1
+2026-10-01 08:20:37,18.056294,120.55294,26.1,0.112,88.8,0.352,0,Normal,distance from route line lowers risk; average speed (last 60 s) lowers risk,1
+2026-10-01 08:20:47,18.056879,120.553221,25.6,0.416,58.4,0.508,0,Normal,distance from route line raises risk; recent turning lowers risk,1
+2026-10-01 08:20:57,18.057625,120.55372,35.3,0.729,27.1,0.505,0,Minor,distance from route line raises risk; deviation band (route) raises risk,1
+2026-10-01 08:21:07,18.057812,120.552985,29.0,0.776,22.4,0.519,1,Minor,distance from route line raises risk; deviation band (route) raises risk,1
+2026-10-01 08:21:17,18.057953,120.552182,31.1,0.78,22.0,0.419,0,Minor,distance from route line raises risk; deviation band (route) raises risk,1
+2026-10-01 08:21:27,18.0581,120.551475,27.6,0.787,21.3,0.445,0,Minor,distance from route line raises risk; deviation band (route) raises risk,1
+2026-10-01 08:21:37,18.058181,120.55109,15.0,0.765,23.5,0.45,0,Minor,distance from route line raises risk; deviation band (route) raises risk,1
+2026-10-01 08:21:47,18.058181,120.55109,0.0,0.797,20.3,0.52,1,Minor,distance from route line raises risk; stopped where trips rarely stop raises risk,1
+2026-10-01 08:21:57,18.058181,120.55109,0.0,0.787,21.3,0.559,1,Minor,distance from route line raises risk; stopped where trips rarely stop raises risk,1
+2026-10-01 08:22:07,18.058314,120.550458,24.7,0.694,30.6,0.56,1,Minor,distance from route line raises risk; deviation band (route) raises risk,1
+2026-10-01 08:22:17,18.058449,120.54982,24.9,0.432,56.8,0.476,0,Normal,distance from route line raises risk; stopped where trips rarely stop lowers risk,1
+2026-10-01 08:22:27,18.058619,120.549011,31.6,0.349,65.1,0.437,0,Normal,distance from route line raises risk; average speed (last 60 s) lowers risk,1
+2026-10-01 08:22:37,18.05899,120.548739,18.0,0.113,88.7,0.448,0,Normal,distance from route line lowers risk; average speed (last 60 s) lowers risk,1
+2026-10-01 08:22:47,18.059286,120.548215,23.2,0.11,89.0,0.417,0,Normal,distance from route line lowers risk; position on route lowers risk,1
+2026-10-01 08:22:57,18.058611,120.547967,28.5,0.219,78.1,0.442,0,Normal,position on route lowers risk; distance from route line raises risk,1
+2026-10-01 08:23:07,18.05794,120.547834,27.2,0.537,46.3,0.55,1,Normal,distance from route line raises risk; stopped where trips rarely stop lowers risk,1
+2026-10-01 08:23:17,18.057241,120.547693,28.3,0.537,46.3,0.541,1,Normal,distance from route line raises risk; stopped where trips rarely stop lowers risk,0
+2026-10-01 08:23:27,18.057016,120.548375,27.5,0.108,89.2,0.462,0,Normal,distance from route line lowers risk; speed lowers risk,0
+2026-10-01 08:23:37,18.057655,120.548494,25.8,0.108,89.2,0.446,0,Normal,distance from route line lowers risk; stopped where trips rarely stop lowers risk,0
+2026-10-01 08:23:47,18.057655,120.548494,0.0,0.342,65.8,0.458,0,Normal,distance from route line lowers risk; speed raises risk,0
+2026-10-01 08:23:57,18.057761,120.548513,4.3,0.115,88.5,0.483,0,Normal,distance from route line lowers risk; average speed (last 60 s) lowers risk,0
+2026-10-01 08:24:07,18.058554,120.548659,32.0,0.112,88.8,0.443,0,Normal,distance from route line lowers risk; average speed (last 60 s) lowers risk,0
+2026-10-01 08:24:17,18.05933,120.548523,31.3,0.115,88.5,0.451,0,Normal,distance from route line lowers risk; average speed (last 60 s) lowers risk,0
+2026-10-01 08:24:27,18.058896,120.548027,25.6,0.115,88.5,0.468,0,Normal,distance from route line lowers risk; position on route lowers risk,0
+2026-10-01 08:24:37,18.058878,120.54735,25.8,0.11,89.0,0.389,0,Normal,distance from route line lowers risk; position on route lowers risk,0
+2026-10-01 08:24:47,18.059027,120.546632,28.0,0.108,89.2,0.36,0,Normal,distance from route line lowers risk; position on route lowers risk,0

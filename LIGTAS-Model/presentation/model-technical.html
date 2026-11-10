@@ -1,0 +1,75 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>The Model: Technical Notes</title><style>
+:root{
+  --bg:#fbfaf7; --panel:#ffffff; --fg:#1d2327; --muted:#5d686f; --line:#e3e0d8;
+  --accent:#0f6b73; --accent-soft:#dcefef; --warn:#a4570b; --warn-soft:#fbeedb;
+  --good:#2f8f6b; --mid:#d9a528; --bad:#c4412b;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#14181b; --panel:#1b2125; --fg:#e8ecee; --muted:#9aa6ad; --line:#2d363b;
+    --accent:#58c1c9; --accent-soft:#17363a; --warn:#f0b062; --warn-soft:#3a2b16;
+    --good:#4fbf93; --mid:#e3b84a; --bad:#ee6b52;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:18px/1.7 system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px}
+header{padding:56px 0 24px}
+.eyebrow{font:600 13px/1 ui-monospace,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:clamp(32px,6vw,46px);line-height:1.1;margin:14px 0 14px;letter-spacing:-.02em}
+.lede{font-size:21px;color:var(--muted);margin:0}
+h2{font-size:27px;margin:0 0 10px;letter-spacing:-.01em}
+section{padding:34px 0 6px;border-top:1px solid var(--line)}
+p{margin:0 0 16px}
+.step{display:flex;gap:16px;margin:0 0 22px}
+.num{flex:0 0 40px;height:40px;border-radius:50%;background:var(--accent);color:var(--bg);font:700 18px/40px system-ui;text-align:center}
+.step h3{margin:0 0 4px;font-size:20px}
+.step p{margin:0;color:var(--muted)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:18px 0}
+.callout{border-left:4px solid var(--warn);background:var(--warn-soft);border-radius:8px;padding:14px 18px;margin:18px 0}
+.callout.good{border-left-color:var(--accent);background:var(--accent-soft)}
+.callout b:first-child{color:var(--warn)} .callout.good b:first-child{color:var(--accent)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.two{grid-template-columns:1fr}.step{gap:12px}}
+.yes,.no{border-radius:12px;padding:16px 18px;border:1px solid var(--line);background:var(--panel)}
+.yes h3{color:var(--good)} .no h3{color:var(--bad)}
+.yes h3,.no h3{margin:0 0 8px;font-size:19px}
+ul{margin:0;padding-left:22px} li{margin-bottom:8px}
+svg text{font-family:system-ui,sans-serif;fill:var(--muted);font-size:13px}
+svg .t{fill:var(--fg);font-weight:600}
+.fig{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;margin:16px 0}
+.cap{font-size:15px;color:var(--muted);margin:6px 4px 2px}
+dl{margin:0} dt{font-weight:700;margin-top:14px} dd{margin:2px 0 0;color:var(--muted)}
+code{font-family:ui-monospace,Menlo,monospace;font-size:.85em;background:var(--accent-soft);padding:1px 6px;border-radius:4px}
+footer{padding:30px 0 60px;color:var(--muted);font-size:15px;border-top:1px solid var(--line);margin-top:30px}
+
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14px}th,td{border:1px solid var(--line);padding:6px 9px;text-align:left}th{background:var(--accent-soft)}
+td.n{text-align:right;font-variant-numeric:tabular-nums}.small{font-size:14px;color:var(--muted)}
+</style></head><body>
+<header><div class="wrap"><div class="eyebrow">The Model · technical notes</div><h1>Pipeline, parameters, and evaluation</h1><p class="lede">What the code in model_v4.py and evaluate_v4.py does, which numbers come from the literature and which are the study's own choices, and what the latest test run shows.</p></div></header><main class="wrap">
+<section><h2>Pipeline</h2>
+<ol>
+<li><b>Clean.</b> Drop bad rows and duplicates; drop a fix when it implies speed above 50 m/s or acceleration beyond ±10 m/s²; drop fixes with error radius above 50 m when an accuracy column exists. A trip that loses over 20% of its records is set aside. Removed on the latest run: 0 of 2936 records.</li>
+<li><b>Measure.</b> Speed over about 3 s, acceleration, jerk, turning, dwell time, route progress, distance from the route line, heading difference, rolling windows measured in elapsed seconds. GPS gaps break continuity and dwell.</li>
+<li><b>Context baseline.</b> Median and spread of speed per 100 m stretch × direction × hour block, shrunk toward the stretch value (K = 8); typical dwell per stretch; a spatial index of earlier trips for distance from history. Fitted only on the history passed in, which is one commuter's earlier trips.</li>
+<li><b>Isolation Forest.</b> Two forests, each fitted on half the history trips. Each history trip is scored by the forest that did not see it; a new trip gets the average of both. Scores are smoothed over 30 s.</li>
+<li><b>Concern level.</b> Maximum of three levels: forest score as a robust z-score against the history, route-distance band (from the planned route and, once enough history exists, variants supported by at least two earlier trips), and current stop length as a robust z-score against locally comparable completed stops (cut at 2.5, 3, 3.5).</li>
+<li><b>Labels.</b> The target is the worst concern level in the next 60 seconds when the full window has GPS coverage.</li>
+<li><b>XGBoost.</b> Three cumulative binary models for level ≥ 1, ≥ 2, ≥ 3 (Frank &amp; Hall, 2001). Recent trips are held out from fitting. Earlier held-out trips support Platt calibration and the last trip is used to estimate empirical prediction sets.</li>
+<li><b>Replay.</b> Trips are judged one at a time in date order, each by a model fitted on earlier trips only, optionally limited to those within an expiry window.</li></ol></section>
+
+<section><h2>Parameters and where they come from</h2><table><tr><th>Parameter</th><th>Value</th><th>Basis</th><th>Status</th></tr><tr><td>Recording interval</td><td class=n>10 s</td><td class=n>Short enough for stops of 30–40 s (Sabir et al., 2025; Deng et al., 2024); uses less battery than 1 Hz polling (Edwards &amp; Hosein, 2025); also used by Bagheri et al. (2020) and Mears et al. (2021)</td><td class=n>Sourced</td></tr><tr><td>Speed limit for cleaning</td><td class=n>50 m/s</td><td class=n>Verma et al. (2024)</td><td class=n>Sourced</td></tr><tr><td>Acceleration limit</td><td class=n>±10 m/s²</td><td class=n>Verma et al. (2024)</td><td class=n>Sourced</td></tr><tr><td>Error radius limit</td><td class=n>50 m (only if the file has an accuracy column)</td><td class=n>Verma et al. (2024)</td><td class=n>Sourced</td></tr><tr><td>Route distance bands</td><td class=n>150 / 500 / 1,000 m</td><td class=n>Edwards &amp; Hosein (2025)</td><td class=n>Sourced</td></tr><tr><td>Stopped speed</td><td class=n>&lt; 5 km/h</td><td class=n>Sabir et al. (2025) low-speed limit</td><td class=n>Sourced</td></tr><tr><td>Forest and stop-length cut-offs</td><td class=n>robust z of 2.5 / 3 / 3.5</td><td class=n>Leys et al. (2013): 2.5; Iglewicz &amp; Hoaglin: 3.5 (NIST/SEMATECH, n.d.); middle level halfway</td><td class=n>Sourced; middle level is the midpoint</td></tr><tr><td>Isolation Forest size</td><td class=n>100 trees, 256-point samples</td><td class=n>Liu et al. (2008)</td><td class=n>Sourced</td></tr><tr><td>Forecast window</td><td class=n>starts at 60 s; 30 s and 120 s compared</td><td class=n>Edwards &amp; Hosein (2025): a 30 s response time means a shorter window leaves no time. No source gives the best length</td><td class=n>Experiment</td></tr><tr><td>Road stretch / shrinkage</td><td class=n>100 m / K = 8</td><td class=n>Study&#x27;s own choice; 50 and 200 m, 4 and 16 are tested</td><td class=n>Experiment</td></tr><tr><td>Parts of the day</td><td class=n>four; night and day only, and no split, are compared</td><td class=n>Night kept apart (UN Women, 2021); rest own choice</td><td class=n>Experiment</td></tr><tr><td>Earlier trips before the route distance uses them</td><td class=n>5; 3 and 10, and the larger-of-both rule, are compared</td><td class=n>Own choice (Edwards &amp; Hosein, 2025 use earlier runs)</td><td class=n>Experiment</td></tr><tr><td>History length (expiry)</td><td class=n>chosen by experiment (none, 14, 7 days tried)</td><td class=n>Gama et al. (2013, 2014): forgetting old data helps when data change</td><td class=n>Tuned by experiment</td></tr><tr><td>Calibration trips</td><td class=n>latest 20% of history, at least 2</td><td class=n>Platt scaling after Niculescu-Mizil &amp; Caruana (2005); 20% as a typical held-out share (Hyndman &amp; Athanasopoulos, 2021)</td><td class=n>Sourced as a guide</td></tr></table>
+<p class="small">Anything marked "Own choice" is not supported by a source and should be described as a design choice in the manuscript, then checked in the evaluation.</p></section>
+
+<section><h2>Latest run</h2><div class='callout'><b>Generated test data.</b> This replay verifies the software pipeline.</div>
+<h3 style="margin-top:14px">History length (expiry), same 55 trips in every row</h3><table><tr><th>History kept</th><th>Trips</th><th>Forecast AP (Major+)</th><th>Baseline AP</th><th>Calibration error</th><th>Empirical set coverage</th><th>False alarms / trip, forecast</th><th>False alarms / trip, baseline</th><th>Alerts per hour, forecast</th><th>Scored windows</th></tr><tr><td>none</td><td class=n>55</td><td class=n>0.11</td><td class=n>0.35</td><td class=n>0.010</td><td class=n>0.83</td><td class=n>-</td><td class=n>-</td><td class=n>-</td><td class=n>2342</td></tr><tr><td>14d</td><td class=n>55</td><td class=n>0.09</td><td class=n>0.17</td><td class=n>0.039</td><td class=n>0.80</td><td class=n>-</td><td class=n>-</td><td class=n>-</td><td class=n>2342</td></tr><tr><td>7d</td><td class=n>55</td><td class=n>0.04</td><td class=n>0.07</td><td class=n>0.061</td><td class=n>0.82</td><td class=n>-</td><td class=n>-</td><td class=n>-</td><td class=n>2342</td></tr></table>
+<h3 style="margin-top:14px">As the history grows (no expiry)</h3><table><tr><th>Earlier trips in history</th><th>Trips</th><th>Forecast AP (Major+)</th><th>Baseline AP</th><th>Calibration error</th><th>Empirical set coverage</th><th>False alarms / trip, forecast</th></tr><tr><td>5-9</td><td class=n>5</td><td class=n>0.13</td><td class=n>0.18</td><td class=n>0.091</td><td class=n>0.87</td><td class=n>-</td></tr><tr><td>10-19</td><td class=n>10</td><td class=n>0.05</td><td class=n>0.01</td><td class=n>0.042</td><td class=n>0.85</td><td class=n>-</td></tr><tr><td>20-29</td><td class=n>10</td><td class=n>0.95</td><td class=n>0.18</td><td class=n>0.027</td><td class=n>0.79</td><td class=n>-</td></tr><tr><td>30-39</td><td class=n>10</td><td class=n>0.02</td><td class=n>0.68</td><td class=n>0.039</td><td class=n>0.80</td><td class=n>-</td></tr><tr><td>40+</td><td class=n>20</td><td class=n>0.18</td><td class=n>0.40</td><td class=n>0.022</td><td class=n>0.84</td><td class=n>-</td></tr></table>
+<p>Forecast AP and baseline AP are average precision for "worst level in the next minute is Major or Critical". The baseline assumes the current level continues. Alerts are raised when the forecast chance of Major or worse is at least 0.5; alerts less than 60 s apart count as one episode.</p>
+<p>Unusual-event check: not available - no trip-notes file was given</p></section>
+
+<section><h2>Known limits</h2><ul>
+<li>Generated trajectories exercise the pipeline. Independently reviewed field trips are needed to estimate alert performance.</li>
+<li>Concern levels describe movement and are defined by the study rules.</li>
+<li>Overlapping forecast windows are dependent. Prediction-set coverage is empirical.</li></ul></section>
+<section><h2>Reproduce</h2><p><code>python3 evaluate_v4.py &lt;dataset_dir&gt; --labels trip_notes.csv --expiry none,14,7</code> then <code>python3 gen_docs.py</code>.</p></section></main>
+<footer><div class="wrap">Thesis prototype. Built from <code>model_v4.py</code> and <code>evaluate_v4.py</code>. Generated by <code>gen_docs.py</code>.</div></footer></body></html>

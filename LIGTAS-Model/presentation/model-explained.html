@@ -1,0 +1,91 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>The Model in Plain Words</title><style>
+:root{
+  --bg:#fbfaf7; --panel:#ffffff; --fg:#1d2327; --muted:#5d686f; --line:#e3e0d8;
+  --accent:#0f6b73; --accent-soft:#dcefef; --warn:#a4570b; --warn-soft:#fbeedb;
+  --good:#2f8f6b; --mid:#d9a528; --bad:#c4412b;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#14181b; --panel:#1b2125; --fg:#e8ecee; --muted:#9aa6ad; --line:#2d363b;
+    --accent:#58c1c9; --accent-soft:#17363a; --warn:#f0b062; --warn-soft:#3a2b16;
+    --good:#4fbf93; --mid:#e3b84a; --bad:#ee6b52;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:18px/1.7 system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px}
+header{padding:56px 0 24px}
+.eyebrow{font:600 13px/1 ui-monospace,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:clamp(32px,6vw,46px);line-height:1.1;margin:14px 0 14px;letter-spacing:-.02em}
+.lede{font-size:21px;color:var(--muted);margin:0}
+h2{font-size:27px;margin:0 0 10px;letter-spacing:-.01em}
+section{padding:34px 0 6px;border-top:1px solid var(--line)}
+p{margin:0 0 16px}
+.step{display:flex;gap:16px;margin:0 0 22px}
+.num{flex:0 0 40px;height:40px;border-radius:50%;background:var(--accent);color:var(--bg);font:700 18px/40px system-ui;text-align:center}
+.step h3{margin:0 0 4px;font-size:20px}
+.step p{margin:0;color:var(--muted)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:18px 0}
+.callout{border-left:4px solid var(--warn);background:var(--warn-soft);border-radius:8px;padding:14px 18px;margin:18px 0}
+.callout.good{border-left-color:var(--accent);background:var(--accent-soft)}
+.callout b:first-child{color:var(--warn)} .callout.good b:first-child{color:var(--accent)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.two{grid-template-columns:1fr}.step{gap:12px}}
+.yes,.no{border-radius:12px;padding:16px 18px;border:1px solid var(--line);background:var(--panel)}
+.yes h3{color:var(--good)} .no h3{color:var(--bad)}
+.yes h3,.no h3{margin:0 0 8px;font-size:19px}
+ul{margin:0;padding-left:22px} li{margin-bottom:8px}
+svg text{font-family:system-ui,sans-serif;fill:var(--muted);font-size:13px}
+svg .t{fill:var(--fg);font-weight:600}
+.fig{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;margin:16px 0}
+.cap{font-size:15px;color:var(--muted);margin:6px 4px 2px}
+dl{margin:0} dt{font-weight:700;margin-top:14px} dd{margin:2px 0 0;color:var(--muted)}
+code{font-family:ui-monospace,Menlo,monospace;font-size:.85em;background:var(--accent-soft);padding:1px 6px;border-radius:4px}
+footer{padding:30px 0 60px;color:var(--muted);font-size:15px;border-top:1px solid var(--line);margin-top:30px}
+
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14px}th,td{border:1px solid var(--line);padding:6px 9px;text-align:left}th{background:var(--accent-soft)}
+td.n{text-align:right;font-variant-numeric:tabular-nums}.small{font-size:14px;color:var(--muted)}
+</style></head><body>
+<header><div class="wrap"><div class="eyebrow">The Model · explained simply</div><h1>How the Model tells when a trip looks unusual</h1><p class="lede">A phone saves where a commuter's vehicle is, once every 10 seconds. From that alone, the Model learns what a normal trip looks like, notices when a trip stops looking normal, and says how likely it is to look worse in the next minute.</p></div></header><main class="wrap">
+<section><h2>The one-minute version</h2>
+<p>Think of a friend who has ridden the same route many times. They know where the vehicle usually stops, how fast it usually goes, and how long a pause usually lasts. If it stopped somewhere new for a long time, or drifted away from the road it always takes, they would notice.</p>
+<p>The Model does the same, using only three things from a phone: the <b>time</b>, the <b>latitude</b>, and the <b>longitude</b>. It does not need anyone to report a problem first.</p>
+<div class="callout"><b>What it is not.</b> The Model does not say that anything bad has happened. "Unusual" only means "different from earlier trips". A vehicle can stop for a good reason.</div></section>
+
+<section><h2>What goes in</h2>
+<p>One position every 10 seconds for each trip. We also need the road the route follows (one for each direction), and short notes from the person recording about anything unusual that happened on a trip.</p></section>
+
+<section><h2>How it works, in six steps</h2>
+<div class="step"><div class="num">1</div><div><h3>Clean the records</h3><p>GPS makes mistakes. A position that would mean the vehicle moved faster than 50 metres per second, or sped up or slowed down faster than 10 metres per second each second, is thrown out. The same goes for duplicates and bad rows.</p></div></div>
+<div class="step"><div class="num">2</div><div><h3>Measure the trip</h3><p>From the clean records we work out speed, how long the vehicle has been stopped, how far along the route it is, and how far it is from the usual road.</p></div></div>
+<div class="step"><div class="num">3</div><div><h3>Learn what is normal</h3><p>For each stretch of road, each direction, and each part of the day, the Model learns the usual speed and the usual stops, using only <b>that person's earlier trips</b>. Every commuter has their own history, and it never looks at the trip it is judging.</p></div></div>
+<div class="step"><div class="num">4</div><div><h3>Score how unusual each moment is</h3><p>An Isolation Forest gives every moment a score. Moments that are easy to tell apart from the rest score higher.</p></div></div>
+<div class="step"><div class="num">5</div><div><h3>Pick a concern level</h3><p>The score is combined with the distance from the usual road and with how long the vehicle has stopped unexpectedly. The result is <b>Normal, Minor, Major, or Critical</b>.</p></div></div>
+<div class="step"><div class="num">6</div><div><h3>Forecast the next minute</h3><p>XGBoost learns from the earlier trips what usually comes next. It gives the chance that the worst concern level in the next 60 seconds will be at least Minor, Major, or Critical, and says how sure it is.</p></div></div></section>
+
+<section><h2>Where do the "right answers" come from?</h2>
+<p>XGBoost needs examples with answers, but nobody marks which moments were unusual. So the answers are made from the trips themselves: a moment's answer is the worst concern level in the minute after it. This shows what looked unusual, not what was dangerous.</p></section>
+
+<section><h2>Old trips expire</h2>
+<p>Roads, routes and traffic change. A trip from many weeks ago may no longer show what is normal. So the Model can keep only recent trips. How recent is decided by testing several lengths and keeping the one with the fewest false alarms without losing accuracy. Expiry settings are compared using the same no-expiry reference labels.</p></section>
+
+<section><h2>Does it work with few trips?</h2>
+<p>At the start there are only a few earlier trips, so the Model knows little. We check this by judging each trip in date order and grouping the results by how many trips came before it.</p>
+<div class='callout'><b>Generated test data.</b> This replay verifies the software pipeline.</div><table><tr><th>Earlier trips in history</th><th>Trips</th><th>Forecast AP (Major+)</th><th>Baseline AP</th><th>Calibration error</th><th>Empirical set coverage</th><th>False alarms / trip, forecast</th></tr><tr><td>5-9</td><td class=n>5</td><td class=n>0.13</td><td class=n>0.18</td><td class=n>0.091</td><td class=n>0.87</td><td class=n>-</td></tr><tr><td>10-19</td><td class=n>10</td><td class=n>0.05</td><td class=n>0.01</td><td class=n>0.042</td><td class=n>0.85</td><td class=n>-</td></tr><tr><td>20-29</td><td class=n>10</td><td class=n>0.95</td><td class=n>0.18</td><td class=n>0.027</td><td class=n>0.79</td><td class=n>-</td></tr><tr><td>30-39</td><td class=n>10</td><td class=n>0.02</td><td class=n>0.68</td><td class=n>0.039</td><td class=n>0.80</td><td class=n>-</td></tr><tr><td>40+</td><td class=n>20</td><td class=n>0.18</td><td class=n>0.40</td><td class=n>0.022</td><td class=n>0.84</td><td class=n>-</td></tr></table><p class="small">AP (average precision) is higher when real concerns are ranked above ordinary moments. Calibration error is lower when the stated chances match what happens. Prediction-set coverage is measured empirically on replayed trips.</p></section>
+
+<section><h2>Too many false alarms?</h2>
+<p>A tool that cries wolf teaches people to ignore it. So we count how many alert episodes it raises on ordinary trips, and we compare against a simple rule: "the current level continues".</p>
+<h3 style="margin-top:14px">History length compared</h3><table><tr><th>History kept</th><th>Trips</th><th>Forecast AP (Major+)</th><th>Baseline AP</th><th>Calibration error</th><th>Empirical set coverage</th><th>False alarms / trip, forecast</th><th>False alarms / trip, baseline</th><th>Alerts per hour, forecast</th><th>Scored windows</th></tr><tr><td>none</td><td class=n>55</td><td class=n>0.11</td><td class=n>0.35</td><td class=n>0.010</td><td class=n>0.83</td><td class=n>-</td><td class=n>-</td><td class=n>-</td><td class=n>2342</td></tr><tr><td>14d</td><td class=n>55</td><td class=n>0.09</td><td class=n>0.17</td><td class=n>0.039</td><td class=n>0.80</td><td class=n>-</td><td class=n>-</td><td class=n>-</td><td class=n>2342</td></tr><tr><td>7d</td><td class=n>55</td><td class=n>0.04</td><td class=n>0.07</td><td class=n>0.061</td><td class=n>0.82</td><td class=n>-</td><td class=n>-</td><td class=n>-</td><td class=n>2342</td></tr></table></section>
+
+<section><h2>What it can and cannot tell you</h2>
+<div class="two"><div class="yes"><h3>Can</h3><ul><li>Show that a trip differs from earlier trips on the same road.</li><li>Notice unexpected stops and leaving the usual route.</li><li>Give a chance and a level of confidence for the next minute.</li></ul></div>
+<div class="no"><h3>Cannot</h3><ul><li>Tell whether harassment or a crime happened.</li><li>See anything that leaves no trace in the movement.</li><li>Replace a commuter asking for help.</li></ul></div></div></section>
+
+<section><h2>Words you may hear</h2><dl>
+<dt>GPS fix</dt><dd>One saved position with its time.</dd>
+<dt>Isolation Forest</dt><dd>A method that finds unusual points by how easily they can be separated from the rest.</dd>
+<dt>XGBoost</dt><dd>A method that learns from examples to forecast an answer from a table of measures.</dd>
+<dt>Calibration</dt><dd>Making a stated chance match how often it comes true.</dd>
+<dt>Prediction set</dt><dd>A short list of plausible levels. The report measures how often it contains the model-defined label.</dd>
+<dt>Cold start</dt><dd>The weak early period when there are few earlier trips.</dd></dl></section></main>
+<footer><div class="wrap">Thesis prototype. Built from <code>model_v4.py</code> and <code>evaluate_v4.py</code>. Generated by <code>gen_docs.py</code>.</div></footer></body></html>

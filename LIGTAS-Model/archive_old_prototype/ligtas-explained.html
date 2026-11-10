@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LIGTAS in Plain Words</title>
+<style>
+:root{
+  --bg:#fbfaf7; --panel:#ffffff; --fg:#1d2327; --muted:#5d686f; --line:#e3e0d8;
+  --accent:#0f6b73; --accent-soft:#dcefef; --warn:#a4570b; --warn-soft:#fbeedb;
+  --good:#2f8f6b; --mid:#d9a528; --bad:#c4412b;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#14181b; --panel:#1b2125; --fg:#e8ecee; --muted:#9aa6ad; --line:#2d363b;
+    --accent:#58c1c9; --accent-soft:#17363a; --warn:#f0b062; --warn-soft:#3a2b16;
+    --good:#4fbf93; --mid:#e3b84a; --bad:#ee6b52;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:18px/1.7 system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px}
+header{padding:56px 0 24px}
+.eyebrow{font:600 13px/1 ui-monospace,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:clamp(32px,6vw,46px);line-height:1.1;margin:14px 0 14px;letter-spacing:-.02em}
+.lede{font-size:21px;color:var(--muted);margin:0}
+h2{font-size:27px;margin:0 0 10px;letter-spacing:-.01em}
+section{padding:34px 0 6px;border-top:1px solid var(--line)}
+p{margin:0 0 16px}
+.step{display:flex;gap:16px;margin:0 0 22px}
+.num{flex:0 0 40px;height:40px;border-radius:50%;background:var(--accent);color:var(--bg);font:700 18px/40px system-ui;text-align:center}
+.step h3{margin:0 0 4px;font-size:20px}
+.step p{margin:0;color:var(--muted)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:18px 0}
+.callout{border-left:4px solid var(--warn);background:var(--warn-soft);border-radius:8px;padding:14px 18px;margin:18px 0}
+.callout.good{border-left-color:var(--accent);background:var(--accent-soft)}
+.callout b:first-child{color:var(--warn)} .callout.good b:first-child{color:var(--accent)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.two{grid-template-columns:1fr}.step{gap:12px}}
+.yes,.no{border-radius:12px;padding:16px 18px;border:1px solid var(--line);background:var(--panel)}
+.yes h3{color:var(--good)} .no h3{color:var(--bad)}
+.yes h3,.no h3{margin:0 0 8px;font-size:19px}
+ul{margin:0;padding-left:22px} li{margin-bottom:8px}
+svg text{font-family:system-ui,sans-serif;fill:var(--muted);font-size:13px}
+svg .t{fill:var(--fg);font-weight:600}
+.fig{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;margin:16px 0}
+.cap{font-size:15px;color:var(--muted);margin:6px 4px 2px}
+dl{margin:0} dt{font-weight:700;margin-top:14px} dd{margin:2px 0 0;color:var(--muted)}
+code{font-family:ui-monospace,Menlo,monospace;font-size:.85em;background:var(--accent-soft);padding:1px 6px;border-radius:4px}
+footer{padding:30px 0 60px;color:var(--muted);font-size:15px;border-top:1px solid var(--line);margin-top:30px}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="eyebrow">LIGTAS · explained simply</div>
+  <h1>How LIGTAS tells when a trip looks unusual</h1>
+  <p class="lede">A phone records where a commuter's vehicle is, every 10 seconds. From that alone, the system learns what a normal trip looks like, notices when a trip stops looking normal, and gives a simple score for the next minute.</p>
+</div></header>
+
+<main class="wrap">
+
+<section>
+  <h2>The one-minute version</h2>
+  <p>Think of a friend who has ridden the same route a hundred times. They know where the vehicle usually slows down, where it usually stops, and how long that takes. If it suddenly stopped for three minutes in the middle of a quiet road, or turned onto a street it never uses, your friend would notice and think <i>"that's not normal."</i></p>
+  <p>LIGTAS is that friend, made out of a computer program. It does not know about crime or accidents. It only knows what <b>normal</b> looks like for this road at this time of day, and it speaks up when something is <b>different</b>.</p>
+  <div class="callout"><b>Important.</b> "Different" is not the same as "dangerous". A vehicle stopping to let a passenger off is different, but harmless. This project measures <i>unusual behaviour</i> as a warning sign, not danger itself. More on that at the end.</div>
+</section>
+
+<section>
+  <h2>What goes in</h2>
+  <p>Only three things for each moment of a trip:</p>
+  <div class="card">
+    <p style="margin:0"><b>1. When</b> (the time) &nbsp;·&nbsp; <b>2. Where, north-south</b> (latitude) &nbsp;·&nbsp; <b>3. Where, east-west</b> (longitude)</p>
+  </div>
+  <p>That's a phone's GPS and clock, nothing more. No camera, no microphone, no names. From those three numbers the program works out how fast the vehicle is going, how quickly it speeds up or slows down, how long it has been stopped, and how far it is from the usual route.</p>
+</section>
+
+<section>
+  <h2>How it works, in four steps</h2>
+
+  <div class="step"><div class="num">1</div><div>
+    <h3>Learn what's normal</h3>
+    <p>The program studies many past trips on the same route. It learns, stretch by stretch, how fast vehicles usually go, where they usually stop, and how long they usually stay. "Normal" depends on <i>where</i> and <i>when</i>: a stop at a traffic light is normal, the same stop in the middle of a long empty road is not.</p>
+  </div></div>
+
+  <div class="step"><div class="num">2</div><div>
+    <h3>Spot what's unusual</h3>
+    <p>A method called <b>Isolation Forest</b> does this. Imagine playing a guessing game with many yes/no questions to single out one point from a crowd. A typical point is hard to single out, because it looks like its neighbours. An odd point is picked out after only a few questions. The fewer questions it takes, the more unusual the moment is. Each moment of a trip gets an "unusualness" score this way.</p>
+  </div></div>
+
+  <div class="step"><div class="num">3</div><div>
+    <h3>Predict the next minute</h3>
+    <p>Another method, <b>XGBoost</b>, learns from the past: <i>"when trips looked like this just before, an unusual moment often followed within a minute."</i> It then gives a chance, from 0% to 100%, that something unusual happens in the next 60 seconds. Think of a weather forecast: "70% chance of rain" says how likely, not that it will certainly happen.</p>
+  </div></div>
+
+  <div class="step"><div class="num">4</div><div>
+    <h3>Show a simple score and say why</h3>
+    <p>The chance is flipped into a <b>Safety Index</b> from 0 to 100, where higher means more normal-looking. The program also names a <b>concern level</b> for the next minute (Normal, Minor, Major or Critical), says how sure it is, and lists what pushed the score down, for example "stopped much longer than usual here" or "far from the usual route".</p>
+  </div></div>
+</section>
+
+<section>
+  <h2>A picture of it</h2>
+  <div class="fig">
+  <svg viewBox="0 0 700 250" width="100%" role="img" aria-label="Illustration of normal trips and an unusual detour">
+    <rect x="0" y="0" width="700" height="250" fill="none"/>
+    <!-- normal route -->
+    <path d="M40 170 C150 170 200 120 300 120 C420 120 470 170 660 150" fill="none" stroke="var(--good)" stroke-width="6" stroke-linecap="round" opacity=".85"/>
+    <path d="M40 176 C150 176 200 126 300 126 C420 126 470 176 660 156" fill="none" stroke="var(--good)" stroke-width="3" opacity=".4"/>
+    <path d="M40 164 C150 164 200 114 300 114 C420 114 470 164 660 144" fill="none" stroke="var(--good)" stroke-width="3" opacity=".4"/>
+    <!-- detour -->
+    <path d="M300 120 C320 60 400 40 440 70 C470 92 440 130 430 138" fill="none" stroke="var(--bad)" stroke-width="5" stroke-dasharray="2 9" stroke-linecap="round"/>
+    <!-- stop -->
+    <circle cx="540" cy="162" r="16" fill="none" stroke="var(--mid)" stroke-width="4"/>
+    <circle cx="540" cy="162" r="6" fill="var(--mid)"/>
+    <!-- labels -->
+    <text class="t" x="40" y="205">Start</text><text class="t" x="620" y="190">End</text>
+    <text x="95" y="228" style="fill:var(--good)">Green band: where many past trips went (normal)</text>
+    <text x="320" y="38" style="fill:var(--bad)" class="t">Detour: far from the usual path</text>
+    <text x="440" y="206" style="fill:var(--mid)" class="t">Long stop in an odd place</text>
+  </svg>
+  <p class="cap">An illustration, not real data. Many past trips form a "normal" band. A trip that leaves the band, or stops where trips rarely stop, scores as unusual.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Four levels, not just a score</h2>
+  <p>A single number hides how serious a situation is. So each moment also gets a <b>concern level</b>, the worst of three things:</p>
+  <div class="card">
+    <p style="margin:0 0 8px"><b>1. How unusual the motion is</b> compared with normal trips at that place and time.</p>
+    <p style="margin:0 0 8px"><b>2. How far off the usual route</b> the vehicle is: <b>Minor</b> beyond 150 m, <b>Major</b> beyond 500 m, <b>Critical</b> beyond 1,000 m. (These limits come from a published travel-safety app. They are design choices, not proven danger limits.)</p>
+    <p style="margin:0"><b>3. How long it has been standing still</b> beyond what is usual at that spot: Minor at 30 seconds over, Major at 90, Critical at 180.</p>
+  </div>
+  <p>The program then forecasts the <b>worst level it expects in the next minute</b>. Think of a traffic light for the next 60 seconds: green is Normal, then Minor, Major and Critical.</p>
+  <div class="callout"><b>How well it works.</b> It beats the plain guess "whatever level it is now, it will stay" at judging how serious things will be, and it is usually within one level of the truth. But it often misses the top level: of 71 truly Critical moments in our tests, it called only 8 Critical. Treat Critical forecasts as unreliable for now.</div>
+</section>
+
+<section>
+  <h2>How sure is it, and can the number be trusted?</h2>
+  <p><b>Is "60%" really 60%?</b> A forecast can rank moments well and still give numbers that are too high or too low, like a weather app that says "70% rain" on days when it rains only half the time. We correct for this using earlier trips and check the fix on later ones. With enough trips the correction clearly helps. It makes the numbers line up much better with what actually happened. Even then, "60%" means 60% chance of <i>unusual behaviour</i>, not 60% chance of danger.</p>
+  <p><b>How sure is it about each moment?</b> Instead of always giving one answer, the program can say <b>"normal likely"</b>, <b>"concern likely"</b>, or <b>"not sure"</b>. We set it to be right a chosen share of the time (90% here) and then checked that on later trips. It kept that promise on average, but the rate varied from trip group to trip group. About 6 in 10 moments got a single answer, and about 8 in 10 of those were right. The other 4 in 10 were "not sure". A promise like this only holds while the future looks like the past, so it needs re-checking whenever new kinds of trips arrive.</p>
+</section>
+
+<section>
+  <h2>Two helpers working together</h2>
+  <p>The first detector (Isolation Forest) learns only from normal trips. That is its strength: it can flag things nobody thought to describe. It struggles with one kind of problem, <b>changes in speed</b>, because normal driving already speeds up and slows down so much.</p>
+  <p>So we added a second helper. It is shown <b>practice examples</b>: normal trips, and trips with problems we deliberately made up (a detour, a long stop, a sudden speed-up or slow-down). It learns what those look like. The system raises an alert if <i>either</i> helper notices something. Think of a security guard who knows what normal looks like, working with another who has studied known tricks.</p>
+  <div class="callout"><b>Careful with this one.</b> The practice problems were made by the same computer program that made the trips, so the second helper may have learned that program's habits. It did well on kinds of speed problems it had never practised (random speed swings, a brief hard brake), which is encouraging, but we will only know if it works on real trips once we have them.</div>
+</section>
+
+<section>
+  <h2>Too many false alarms?</h2>
+  <p>A system that cries wolf gets ignored. A false alarm here means an alert on a perfectly normal trip, for example a normal stop that looks unusual. We now let you choose a <b>false-alarm budget</b>, such as "no more than about one false alert every four trips". The program sets how sensitive it is to stay near that budget, and needs two unusual moments in a row before alerting, so a single odd reading is ignored.</p>
+  <p>It stays near the budget, not exactly on it: on separate test trips the real rate came out between about 0.8 and 1.8 times what we asked. At the strictest setting, it still caught nearly every planted detour and long stop, about three in four planted speed problems, and about six in ten of the odd-behaviour types it was not designed for. A looser budget catches more but raises more false alarms. Where to set it is a choice for the people running the app.</p>
+</section>
+
+<section>
+  <h2>Did we check that it works?</h2>
+  <p>We had no records of real incidents, so we tested it a different way: we <b>planted fake problems</b> into real-looking trips, where we knew exactly what and where they were, and checked whether the program found them. It is like hiding coins in a room to see if a metal detector works.</p>
+  <div class="two">
+    <div class="yes"><h3>It did well at</h3><ul>
+      <li><b>Detours.</b> Trips that wandered off the usual path were caught reliably, even small ones (a few hundred metres).</li>
+      <li><b>Unplanned long stops.</b> A vehicle sitting still for 90 seconds or more somewhere it normally doesn't stop was caught very reliably.</li>
+    </ul></div>
+    <div class="no"><h3>It did poorly at</h3><ul>
+      <li><b>Speed changes, with the first detector alone.</b> A vehicle going 50% faster or slower for a short stretch was barely noticed. The second helper fixed most of this in our tests, with the caution described above.</li>
+      <li><b>Warning ahead of time.</b> When a problem appeared suddenly, the program showed no warning at all. When it built up slowly (the vehicle slowing before a stop, or drifting off route), it gave a weak early hint.</li>
+    </ul></div>
+  </div>
+  <p style="margin-top:16px">We also checked that its "next minute" predictions beat a simple guess ("if something unusual is happening now, more will follow"). They did, by a clear margin. And the results stayed steady when we re-ran the program with different random settings.</p>
+</section>
+
+<section>
+  <h2>What it can and cannot tell you</h2>
+  <div class="callout good"><b>It can say:</b> "This trip is behaving unusually for this place and time of day, and here is why."</div>
+  <div class="callout"><b>It cannot say:</b> "This commuter is in danger." Unusual behaviour can be harmless, and danger can happen during perfectly normal-looking motion.</div>
+  <p>Why not? Because the data we have has <b>no real incident records</b>: no crashes, no reports of harassment, no riders saying "I felt unsafe". Without those, we can show the program finds odd behaviour, but not that odd behaviour means danger. Published studies of buses do link some GPS patterns (such as long stops and sudden braking) to real crashes, which is why we think it is a reasonable warning sign, but that is evidence from other places, not from this data.</p>
+  <p>The trips so far are also <b>computer-generated</b>, cover <b>one route</b> and <b>one vehicle type</b>, and happen in <b>daytime</b> only. Once real trips arrive, the results will change, and the same tests will be run again.</p>
+</section>
+
+<section>
+  <h2>What would make it truly about safety</h2>
+  <ul>
+    <li><b>Incident records:</b> when something went wrong on a trip (a crash, a near-miss, harassment, theft).</li>
+    <li><b>Rider ratings:</b> a simple "how safe did you feel, 1 to 5?" after a trip.</li>
+    <li><b>More variety:</b> night trips, rainy days, other routes and vehicles.</li>
+    <li><b>Faster GPS:</b> recording every second or two would let it notice sudden braking.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Words you may hear</h2>
+  <dl>
+    <dt>GPS fix</dt><dd>One recorded position and time from the phone. Here, one every 10 seconds.</dd>
+    <dt>Anomaly</dt><dd>Something that doesn't fit the usual pattern. Unusual, not necessarily bad.</dd>
+    <dt>Isolation Forest</dt><dd>A method that finds unusual points by how quickly they can be separated from the rest.</dd>
+    <dt>XGBoost</dt><dd>A method that learns patterns from past examples to predict what happens next.</dd>
+    <dt>Route deviation</dt><dd>How far a vehicle is from the planned or usual route. The scheme we use ranks it as normal (up to 150 m), minor (to 500 m), major (to 1,000 m) or critical (beyond 1,000 m). Those limits come from a published app and are design choices, not proven safety limits.</dd>
+    <dt>Dwell</dt><dd>How long a vehicle has been standing still.</dd>
+    <dt>Concern level</dt><dd>Normal, Minor, Major or Critical. The worst of three signs: unusual motion, distance from the route, and time stopped beyond what is usual.</dd>
+    <dt>Calibration</dt><dd>Checking that "60% chance" really means about 60 out of 100 similar moments, and correcting the numbers if not.</dd>
+    <dt>Confidence set</dt><dd>Instead of one answer, the program may answer "normal likely", "concern likely" or "not sure", so that its answers are right a chosen share of the time.</dd>
+    <dt>False-alarm budget</dt><dd>The number of false alerts you are willing to accept on normal trips. The program adjusts how easily it alerts to stay near that number.</dd>
+    <dt>Planted problem</dt><dd>A made-up problem, such as a detour or a long stop, added to a normal trip so we know exactly what the program should find.</dd>
+    <dt>Safety Index</dt><dd>The 0–100 score. Higher means the trip looks more normal. It is a warning sign, not a verdict.</dd>
+    <dt>Proxy</dt><dd>A stand-in. Here, "unusual behaviour" stands in for "possible safety concern".</dd>
+  </dl>
+</section>
+
+</main>
+<footer><div class="wrap">Plain-language summary of the LIGTAS thesis prototype. For the technical version, with tables, references and limitations, see <code>ligtas-cascade.html</code>. Figures and claims come from the first dataset only (computer-generated trips) and will be re-checked when more data arrives.</div></footer>
+</body>
+</html>

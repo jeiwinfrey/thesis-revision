@@ -1,0 +1,193 @@
+{
+ "abl": {
+  "IF event": {
+   "Persistence (event now \u2192 event soon)": {
+    "prauc": 0.40821009918812606,
+    "prauc_sd": 0.09105150231060116,
+    "roc": 0.5885945291406097
+   },
+   "v1 features": {
+    "prauc": 0.6676360516497709,
+    "prauc_sd": 0.06907286734592505,
+    "roc": 0.776658491518806
+   },
+   "+ deviation group": {
+    "prauc": 0.6779719716974378,
+    "prauc_sd": 0.09356065078846344,
+    "roc": 0.7803595912911946
+   },
+   "+ dwell group": {
+    "prauc": 0.6776221174378961,
+    "prauc_sd": 0.05764560551845835,
+    "roc": 0.7851385957898639
+   },
+   "v2 full (+deviation +dwell)": {
+    "prauc": 0.6755239477907189,
+    "prauc_sd": 0.0639776562586538,
+    "roc": 0.7869628816944717
+   }
+  },
+  "Rule event (deviation / excess dwell)": {
+   "Persistence (event now \u2192 event soon)": {
+    "prauc": 0.4778259844781006,
+    "prauc_sd": 0.060485597167073614,
+    "roc": 0.7168839449294605
+   },
+   "v1 features": {
+    "prauc": 0.6789898486690765,
+    "prauc_sd": 0.06389816834162465,
+    "roc": 0.8092404111517038
+   },
+   "+ deviation group": {
+    "prauc": 0.6734683993524828,
+    "prauc_sd": 0.0852726473615957,
+    "roc": 0.7975594049605951
+   },
+   "+ dwell group": {
+    "prauc": 0.6667249269944012,
+    "prauc_sd": 0.06794463176288172,
+    "roc": 0.807149871319888
+   },
+   "v2 full (+deviation +dwell)": {
+    "prauc": 0.6705167817539368,
+    "prauc_sd": 0.07547951081521198,
+    "roc": 0.8001772312220726
+   }
+  },
+  "Either": {
+   "Persistence (event now \u2192 event soon)": {
+    "prauc": 0.4803269224056144,
+    "prauc_sd": 0.09756736783421123,
+    "roc": 0.6317833432491161
+   },
+   "v1 features": {
+    "prauc": 0.69810745793741,
+    "prauc_sd": 0.054886401104955594,
+    "roc": 0.7761178254099345
+   },
+   "+ deviation group": {
+    "prauc": 0.706387271414657,
+    "prauc_sd": 0.059576000153186884,
+    "roc": 0.7713433319317979
+   },
+   "+ dwell group": {
+    "prauc": 0.7037746688240123,
+    "prauc_sd": 0.06325188130185273,
+    "roc": 0.7835184364455064
+   },
+   "v2 full (+deviation +dwell)": {
+    "prauc": 0.701362353485348,
+    "prauc_sd": 0.05996559393134726,
+    "roc": 0.7799389407731893
+   }
+  }
+ },
+ "base_rates": {
+  "IF event": 0.3311240705342725,
+  "Rule event (deviation / excess dwell)": 0.1840133587445738,
+  "Either": 0.358463220749702
+ },
+ "sens": [
+  {
+   "Q": 0.05,
+   "base": 0.20663333474525084,
+   "xgb": 0.5898757590558131,
+   "persist": 0.3103505447732838,
+   "lift": 2.85469795947031
+  },
+  {
+   "Q": 0.1,
+   "base": 0.3311240705342725,
+   "xgb": 0.6755239477907189,
+   "persist": 0.40821009918812606,
+   "lift": 2.040093149074766
+  },
+  {
+   "Q": 0.15,
+   "base": 0.44202505837328476,
+   "xgb": 0.7767475218781789,
+   "persist": 0.520696530843182,
+   "lift": 1.7572477106540532
+  },
+  {
+   "Q": 0.2,
+   "base": 0.5323118888164449,
+   "xgb": 0.8560215568398256,
+   "persist": 0.6158812034883683,
+   "lift": 1.6081203047016752
+  }
+ ],
+ "stab": {
+  "seed_jaccard": 0.8673793632821013,
+  "seed_spearman": 0.9919709548507791,
+  "trees_jaccard": 0.9138592939250114,
+  "trees_spearman": 0.9924973089620942
+ },
+ "cold": [
+  {
+   "N": 6,
+   "prauc": 0.5581975246833538,
+   "sd": 0.09045919139536922,
+   "fusion_tpr": 0.272862048859948,
+   "if_tpr": 0.49675130995159006
+  },
+  {
+   "N": 12,
+   "prauc": 0.544798602726884,
+   "sd": 0.07567674083820435,
+   "fusion_tpr": 0.332049528565635,
+   "if_tpr": 0.5510095873366182
+  },
+  {
+   "N": 24,
+   "prauc": 0.6326378413978806,
+   "sd": 0.0032134442765359844,
+   "fusion_tpr": 0.5599607267149284,
+   "if_tpr": 0.5770969583119444
+  },
+  {
+   "N": 36,
+   "prauc": 0.6301041950521346,
+   "sd": 0.03602624936175583,
+   "fusion_tpr": 0.5731036943396887,
+   "if_tpr": 0.6047695172345031
+  },
+  {
+   "N": 48,
+   "prauc": 0.6847437283122972,
+   "sd": 0.023311852030910612,
+   "fusion_tpr": 0.5971705180388653,
+   "if_tpr": 0.6262409004005643
+  }
+ ],
+ "facts": {
+  "band_hist": [
+   2932,
+   4,
+   0,
+   0
+  ],
+  "band_poly": [
+   2655,
+   281,
+   0,
+   0
+  ],
+  "n": 2936,
+  "max_d_poly": 392.80384561323217,
+  "max_d_hist": 174.78022585325965,
+  "median_step_m": 64.53270846345387,
+  "ev_rule_rate": 0.09673024523160763,
+  "frac_band_poly_ge1": 0.09570844686648501,
+  "frac_band_hist_ge1": 0.0013623978201634877,
+  "frac_excess30": 0.0013623978201634877
+ }
+}
+detour_minor {'if1': (np.float64(0.86), 0.36, np.float64(0.52)), 'if2': (np.float64(0.94), 0.6, np.float64(0.5)), 'rot': (np.float64(0.9), 0.45, np.float64(0.52)), 'd_hist': (np.float64(0.97), 0.88, np.float64(0.44)), 'excess_dwell': (np.float64(0.46), 0.0, np.float64(0.51)), 'd': (np.float64(0.89), 0.31, np.float64(0.5)), 'xgb': (np.float64(0.86), 0.35, np.float64(0.54)), 'fusion': (np.float64(0.91), 0.48, np.float64(0.5))}
+detour_major {'if1': (np.float64(0.97), 0.88, np.float64(0.46)), 'if2': (np.float64(0.99), 0.91, np.float64(0.42)), 'rot': (np.float64(0.97), 0.85, np.float64(0.46)), 'd_hist': (np.float64(0.98), 0.93, np.float64(0.47)), 'excess_dwell': (np.float64(0.46), 0.0, np.float64(0.47)), 'd': (np.float64(0.95), 0.7, np.float64(0.41)), 'xgb': (np.float64(0.91), 0.46, np.float64(0.41)), 'fusion': (np.float64(0.96), 0.85, np.float64(0.45))}
+detour_critical {'if1': (np.float64(0.98), 0.93, np.float64(0.5)), 'if2': (np.float64(0.99), 0.97, np.float64(0.49)), 'rot': (np.float64(0.99), 0.94, np.float64(0.52)), 'd_hist': (np.float64(0.99), 0.98, np.float64(0.46)), 'excess_dwell': (np.float64(0.46), 0.0, np.float64(0.49)), 'd': (np.float64(0.97), 0.84, np.float64(0.5)), 'xgb': (np.float64(0.92), 0.43, np.float64(0.49)), 'fusion': (np.float64(0.98), 0.94, np.float64(0.48))}
+stop_90s {'if1': (np.float64(0.92), 0.46, np.float64(0.43)), 'if2': (np.float64(0.96), 0.73, np.float64(0.44)), 'rot': (np.float64(0.98), 0.85, np.float64(0.43)), 'd_hist': (np.float64(0.69), 0.04, np.float64(0.57)), 'excess_dwell': (np.float64(0.97), 0.92, np.float64(0.49)), 'd': (np.float64(0.75), 0.02, np.float64(0.4)), 'xgb': (np.float64(0.76), 0.06, np.float64(0.4)), 'fusion': (np.float64(0.97), 0.85, np.float64(0.46))}
+stop_180s {'if1': (np.float64(0.93), 0.54, np.float64(0.38)), 'if2': (np.float64(0.96), 0.67, np.float64(0.39)), 'rot': (np.float64(0.97), 0.77, np.float64(0.39)), 'd_hist': (np.float64(0.66), 0.0, np.float64(0.53)), 'excess_dwell': (np.float64(0.93), 0.86, np.float64(0.49)), 'd': (np.float64(0.74), 0.0, np.float64(0.36)), 'xgb': (np.float64(0.75), 0.0, np.float64(0.36)), 'fusion': (np.float64(0.94), 0.77, np.float64(0.47))}
+speed_up {'if1': (np.float64(0.75), 0.19, np.float64(0.47)), 'if2': (np.float64(0.71), 0.14, np.float64(0.45)), 'rot': (np.float64(0.72), 0.1, np.float64(0.49)), 'd_hist': (np.float64(0.57), 0.06, np.float64(0.48)), 'excess_dwell': (np.float64(0.53), 0.1, np.float64(0.49)), 'd': (np.float64(0.63), 0.01, np.float64(0.47)), 'xgb': (np.float64(0.59), 0.03, np.float64(0.47)), 'fusion': (np.float64(0.57), 0.09, np.float64(0.47))}
+crawl {'if1': (np.float64(0.56), 0.03, np.float64(0.58)), 'if2': (np.float64(0.53), 0.05, np.float64(0.57)), 'rot': (np.float64(0.52), 0.08, np.float64(0.6)), 'd_hist': (np.float64(0.56), 0.06, np.float64(0.43)), 'excess_dwell': (np.float64(0.52), 0.08, np.float64(0.54)), 'd': (np.float64(0.63), 0.05, np.float64(0.56)), 'xgb': (np.float64(0.56), 0.04, np.float64(0.6)), 'fusion': (np.float64(0.51), 0.08, np.float64(0.55))}
+python3 pipeline2.py /Users/jeiwinfrey/Desktop/Thesis/01-test-route   107.32s user 8.41s system 106% cpu 1:49.02 total

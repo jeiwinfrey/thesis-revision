@@ -1,0 +1,27 @@
+fold 1/6 done  0.1 min
+fold 2/6 done  0.1 min
+fold 3/6 done  0.2 min
+fold 4/6 done  0.2 min
+fold 5/6 done  0.3 min
+fold 6/6 done  0.4 min
+done in 0.4 min; 9 pass 3 fail 1 n/a
+PASS | Data quality | 0 of 60 trips flagged
+PASS | Forecast beats persistence | 0.71 vs 0.51 (SD 0.09)
+PASS | Detects rule-designed events | 0.97
+PASS | Detects events the rules miss | forest 0.85 vs rules 0.73
+FAIL | Beats generic detectors | forest 0.81 / lof 0.82 / ocsvm 0.80 / maxz 0.66
+PASS | Speed changes (held-out magnitudes) | best: Supervised detector (trained on planted events) 0.86 (forest 0.65)
+FAIL | Supervised detector generalises | asd 0.83 vs forest 0.85
+PASS | Speed events of a new kind | hybrid 0.84, supervised 0.86, forest 0.67
+FAIL | False alarms, fixed level ≥ Major | 1.06 per trip (8 per hour)
+PASS | False-alarm budget respected | 1.11 per trip
+PASS | Calibration | 0.045 (raw 0.106)
+PASS | Conformal coverage | 0.90 vs 0.90
+N/A | Real labels: trip-level accuracy | no usable labels provided
+GROUPS
+  designed {'forest': 0.97, 'forest4': 0.96, 'rules': 0.93, 'lof': 0.96, 'ocsvm': 0.97, 'maxz': 0.8, 'asd': 0.99, 'hybrid': 0.99}
+  speed_seen {'forest': 0.67, 'forest4': 0.69, 'rules': 0.57, 'lof': 0.72, 'ocsvm': 0.64, 'maxz': 0.57, 'asd': 0.89, 'hybrid': 0.87}
+  speed_heldout {'forest': 0.65, 'forest4': 0.68, 'rules': 0.54, 'lof': 0.7, 'ocsvm': 0.63, 'maxz': 0.56, 'asd': 0.86, 'hybrid': 0.84}
+  speed_newtype {'forest': 0.67, 'forest4': 0.68, 'rules': 0.54, 'lof': 0.72, 'ocsvm': 0.69, 'maxz': 0.52, 'asd': 0.86, 'hybrid': 0.84}
+  unseen {'forest': 0.85, 'forest4': 0.88, 'rules': 0.73, 'lof': 0.84, 'ocsvm': 0.83, 'maxz': 0.68, 'asd': 0.83, 'hybrid': 0.88}
+python3 evaluate.py /Users/jeiwinfrey/Desktop/Thesis/01-test-route  34.32s user 12.18s system 200% cpu 23.151 total

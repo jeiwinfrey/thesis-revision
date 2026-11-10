@@ -1,0 +1,18 @@
+fold 1/6 done  0.0 min
+fold 2/6 done  0.1 min
+fold 3/6 done  0.1 min
+fold 4/6 done  0.2 min
+fold 5/6 done  0.2 min
+fold 6/6 done  0.3 min
+done in 0.3 min; 6 pass 1 fail 2 n/a
+PASS | Data quality | 0 of 60 trips flagged
+PASS | Forecast beats persistence | 0.71 vs 0.51 (SD 0.09)
+PASS | Detects rule-designed events | 0.97
+PASS | Detects events the rules miss | forest 0.86 vs rules 0.75
+N/A | Beats generic detectors | forest 0.88 / lof 0.89 / ocsvm 0.87 / maxz 0.72
+FAIL | False alarms at level ≥ Major | 1.06 per trip (8 per hour)
+PASS | Calibration | 0.045 (raw 0.106)
+PASS | Conformal coverage | 0.69 vs 0.70
+N/A | Real labels: trip-level accuracy | no usable labels provided
+GROUPS {'designed': {'forest': 0.97, 'rules': 0.93, 'lof': 0.96, 'ocsvm': 0.97, 'maxz': 0.8, 'xgb': 0.86}, 'hard': {'forest': 0.67, 'rules': 0.57, 'lof': 0.74, 'ocsvm': 0.64, 'maxz': 0.57, 'xgb': 0.65}, 'unseen': {'forest': 0.86, 'rules': 0.75, 'lof': 0.85, 'ocsvm': 0.83, 'maxz': 0.68, 'xgb': 0.75}}
+python3 evaluate.py /Users/jeiwinfrey/Desktop/Thesis/01-test-route  61.36s user 39.54s system 570% cpu 17.696 total

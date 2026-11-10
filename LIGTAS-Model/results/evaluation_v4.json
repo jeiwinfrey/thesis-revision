@@ -1,0 +1,2803 @@
+{
+ "dataset": "01-test-route",
+ "data_source": "synthetic",
+ "interval_s": 10.0,
+ "max_gap_s": 25.0,
+ "horizon_s": 60.0,
+ "trips_total": 60,
+ "minh": 5,
+ "alert": {
+  "level": 2,
+  "prob": 0.5,
+  "merge_s": 60.0
+ },
+ "settings": {
+  "expiry": "none,14,7",
+  "minh": 5,
+  "alert_level": 2,
+  "alert_prob": 0.5,
+  "offroute_level": false,
+  "horizon": 60.0,
+  "tod_mode": "four",
+  "route_mode": "history",
+  "route_min": 5,
+  "model_opts": "{}",
+  "seg": 100.0,
+  "shrink": 8.0,
+  "max_gap": 25.0,
+  "event_window": 120.0,
+  "merge_s": 60.0
+ },
+ "reference": "Full-horizon no-expiry pseudo-labels for all history settings",
+ "matrix_orientation": "Rows are reference classes, columns are predicted classes. Binary order: negative, positive.",
+ "versions": {
+  "python": "3.14.5",
+  "numpy": "2.5.4",
+  "pandas": "3.1.1",
+  "scipy": "1.18.1",
+  "scikit-learn": "1.9.1",
+  "xgboost": "3.4.1"
+ },
+ "cleaning": {
+  "trips": 60,
+  "raw_rows": 2936,
+  "bad_rows": 0,
+  "duplicates": 0,
+  "poor_accuracy": 0,
+  "speed_over_50": 0,
+  "accel_over_10": 0,
+  "removed": 0,
+  "unusable_trips": []
+ },
+ "expiry_sweep": {
+  "none": {
+   "trips": 55,
+   "rows": 2727,
+   "mean_history_trips": 32.0,
+   "scored_windows": 2342,
+   "unscored_windows": 385,
+   "alert_matrices": {
+    "1": {
+     "forecast": {
+      "matrix": [
+       [
+        1956,
+        55
+       ],
+       [
+        266,
+        65
+       ]
+      ],
+      "precision": 0.5416666666666666,
+      "recall": 0.19637462235649547,
+      "specificity": 0.9726504226752859
+     },
+     "persistence": {
+      "matrix": [
+       [
+        1978,
+        33
+       ],
+       [
+        204,
+        127
+       ]
+      ],
+      "precision": 0.79375,
+      "recall": 0.38368580060422963,
+      "specificity": 0.9835902536051716
+     },
+     "fixed_distance": {
+      "matrix": [
+       [
+        1891,
+        120
+       ],
+       [
+        193,
+        138
+       ]
+      ],
+      "precision": 0.5348837209302325,
+      "recall": 0.4169184290030212,
+      "specificity": 0.9403281949278965
+     },
+     "forecast_from_below_threshold": {
+      "matrix": [
+       [
+        1930,
+        48
+       ],
+       [
+        176,
+        28
+       ]
+      ],
+      "precision": 0.3684210526315789,
+      "recall": 0.13725490196078433,
+      "specificity": 0.9757330637007078
+     }
+    },
+    "2": {
+     "forecast": {
+      "matrix": [
+       [
+        2221,
+        26
+       ],
+       [
+        94,
+        1
+       ]
+      ],
+      "precision": 0.037037037037037035,
+      "recall": 0.010526315789473684,
+      "specificity": 0.9884290164663997
+     },
+     "persistence": {
+      "matrix": [
+       [
+        2237,
+        10
+       ],
+       [
+        56,
+        39
+       ]
+      ],
+      "precision": 0.7959183673469388,
+      "recall": 0.4105263157894737,
+      "specificity": 0.995549621717846
+     },
+     "fixed_distance": {
+      "matrix": [
+       [
+        2042,
+        205
+       ],
+       [
+        42,
+        53
+       ]
+      ],
+      "precision": 0.2054263565891473,
+      "recall": 0.5578947368421052,
+      "specificity": 0.9087672452158434
+     },
+     "forecast_from_below_threshold": {
+      "matrix": [
+       [
+        2212,
+        25
+       ],
+       [
+        56,
+        0
+       ]
+      ],
+      "precision": 0.0,
+      "recall": 0.0,
+      "specificity": 0.9888243182834153
+     }
+    },
+    "3": {
+     "forecast": {
+      "matrix": [
+       [
+        2275,
+        8
+       ],
+       [
+        59,
+        0
+       ]
+      ],
+      "precision": 0.0,
+      "recall": 0.0,
+      "specificity": 0.9964958388085852
+     },
+     "persistence": {
+      "matrix": [
+       [
+        2277,
+        6
+       ],
+       [
+        34,
+        25
+       ]
+      ],
+      "precision": 0.8064516129032258,
+      "recall": 0.423728813559322,
+      "specificity": 0.9973718791064389
+     },
+     "fixed_distance": {
+      "matrix": [
+       [
+        2055,
+        228
+       ],
+       [
+        29,
+        30
+       ]
+      ],
+      "precision": 0.11627906976744186,
+      "recall": 0.5084745762711864,
+      "specificity": 0.900131406044678
+     },
+     "forecast_from_below_threshold": {
+      "matrix": [
+       [
+        2269,
+        8
+       ],
+       [
+        34,
+        0
+       ]
+      ],
+      "precision": 0.0,
+      "recall": 0.0,
+      "specificity": 0.9964866051822574
+     }
+    }
+   },
+   "base_rate_1": 0.14133219470538003,
+   "ap_model_1": 0.36070861100961943,
+   "ap_persist_1": 0.3916556426583007,
+   "ece_1": 0.03973004695225641,
+   "base_rate_2": 0.040563620836891544,
+   "ap_model_2": 0.10760404545464698,
+   "ap_persist_2": 0.35065662203575304,
+   "ece_2": 0.00998157201662811,
+   "base_rate_3": 0.02519214346712212,
+   "ap_model_3": 0.08967950474371184,
+   "ap_persist_3": 0.3562342915332677,
+   "ece_3": 0.01073228877316816,
+   "ordinal_matrix": [
+    [
+     1975,
+     25,
+     8,
+     3
+    ],
+    [
+     189,
+     33,
+     4,
+     10
+    ],
+    [
+     30,
+     6,
+     0,
+     0
+    ],
+    [
+     59,
+     0,
+     0,
+     0
+    ]
+   ],
+   "mae_model": 0.28764452454469497,
+   "mae_persist": 0.14645602049530315,
+   "conf_set_windows": 2342,
+   "conf_coverage": 0.829205807002562,
+   "conf_avg_size": 1.5469684030742954,
+   "ordinary_trips": 0,
+   "false_alarms_per_trip_forecast": null,
+   "alerts_per_hour_forecast": null,
+   "trips_with_alarm_forecast": null,
+   "false_alarms_per_trip_persist": null,
+   "alerts_per_hour_persist": null,
+   "trips_with_alarm_persist": null,
+   "false_alarms_per_trip_fixed": null,
+   "alerts_per_hour_fixed": null,
+   "trips_with_alarm_fixed": null
+  },
+  "14d": {
+   "trips": 55,
+   "rows": 2727,
+   "mean_history_trips": 13.8,
+   "scored_windows": 2342,
+   "unscored_windows": 385,
+   "alert_matrices": {
+    "1": {
+     "forecast": {
+      "matrix": [
+       [
+        1849,
+        162
+       ],
+       [
+        212,
+        119
+       ]
+      ],
+      "precision": 0.4234875444839858,
+      "recall": 0.3595166163141994,
+      "specificity": 0.9194430631526603
+     },
+     "persistence": {
+      "matrix": [
+       [
+        1937,
+        74
+       ],
+       [
+        203,
+        128
+       ]
+      ],
+      "precision": 0.6336633663366337,
+      "recall": 0.3867069486404834,
+      "specificity": 0.9632023868722028
+     },
+     "fixed_distance": {
+      "matrix": [
+       [
+        1891,
+        120
+       ],
+       [
+        193,
+        138
+       ]
+      ],
+      "precision": 0.5348837209302325,
+      "recall": 0.4169184290030212,
+      "specificity": 0.9403281949278965
+     },
+     "forecast_from_below_threshold": {
+      "matrix": [
+       [
+        1824,
+        113
+       ],
+       [
+        153,
+        50
+       ]
+      ],
+      "precision": 0.3067484662576687,
+      "recall": 0.24630541871921183,
+      "specificity": 0.9416623644811565
+     }
+    },
+    "2": {
+     "forecast": {
+      "matrix": [
+       [
+        2197,
+        50
+       ],
+       [
+        94,
+        1
+       ]
+      ],
+      "precision": 0.0196078431372549,
+      "recall": 0.010526315789473684,
+      "specificity": 0.9777481085892301
+     },
+     "persistence": {
+      "matrix": [
+       [
+        2237,
+        10
+       ],
+       [
+        75,
+        20
+       ]
+      ],
+      "precision": 0.6666666666666666,
+      "recall": 0.21052631578947367,
+      "specificity": 0.995549621717846
+     },
+     "fixed_distance": {
+      "matrix": [
+       [
+        2042,
+        205
+       ],
+       [
+        42,
+        53
+       ]
+      ],
+      "precision": 0.2054263565891473,
+      "recall": 0.5578947368421052,
+      "specificity": 0.9087672452158434
+     },
+     "forecast_from_below_threshold": {
+      "matrix": [
+       [
+        2192,
+        45
+       ],
+       [
+        75,
+        0
+       ]
+      ],
+      "precision": 0.0,
+      "recall": 0.0,
+      "specificity": 0.9798837729101475
+     }
+    },
+    "3": {
+     "forecast": {
+      "matrix": [
+       [
+        2275,
+        8
+       ],
+       [
+        59,
+        0
+       ]
+      ],
+      "precision": 0.0,
+      "recall": 0.0,
+      "specificity": 0.9964958388085852
+     },
+     "persistence": {
+      "matrix": [
+       [
+        2278,
+        5
+       ],
+       [
+        48,
+        11
+       ]
+      ],
+      "precision": 0.6875,
+      "recall": 0.1864406779661017,
+      "specificity": 0.9978098992553658
+     },
+     "fixed_distance": {
+      "matrix": [
+       [
+        2055,
+        228
+       ],
+       [
+        29,
+        30
+       ]
+      ],
+      "precision": 0.11627906976744186,
+      "recall": 0.5084745762711864,
+      "specificity": 0.900131406044678
+     },
+     "forecast_from_below_threshold": {
+      "matrix": [
+       [
+        2270,
+        8
+       ],
+       [
+        48,
+        0
+       ]
+      ],
+      "precision": 0.0,
+      "recall": 0.0,
+      "specificity": 0.9964881474978051
+     }
+    }
+   },
+   "base_rate_1": 0.14133219470538003,
+   "ap_model_1": 0.3181477889687885,
+   "ap_persist_1": 0.33172007980749624,
+   "ece_1": 0.07889298868323556,
+   "base_rate_2": 0.040563620836891544,
+   "ap_model_2": 0.09271097557377717,
+   "ap_persist_2": 0.1723747883800021,
+   "ece_2": 0.03877565597506392,
+   "base_rate_3": 0.02519214346712212,
+   "ap_model_3": 0.042587837917351046,
+   "ap_persist_3": 0.14867326926138746,
+   "ece_3": 0.022747832188013226,
+   "ordinal_matrix": [
+    [
+     1865,
+     106,
+     37,
+     3
+    ],
+    [
+     163,
+     60,
+     3,
+     10
+    ],
+    [
+     23,
+     13,
+     0,
+     0
+    ],
+    [
+     37,
+     22,
+     0,
+     0
+    ]
+   ],
+   "mae_model": 0.3070582986896925,
+   "mae_persist": 0.17719897523484202,
+   "conf_set_windows": 2342,
+   "conf_coverage": 0.7976088812980359,
+   "conf_avg_size": 1.405209222886422,
+   "ordinary_trips": 0,
+   "false_alarms_per_trip_forecast": null,
+   "alerts_per_hour_forecast": null,
+   "trips_with_alarm_forecast": null,
+   "false_alarms_per_trip_persist": null,
+   "alerts_per_hour_persist": null,
+   "trips_with_alarm_persist": null,
+   "false_alarms_per_trip_fixed": null,
+   "alerts_per_hour_fixed": null,
+   "trips_with_alarm_fixed": null
+  },
+  "7d": {
+   "trips": 55,
+   "rows": 2727,
+   "mean_history_trips": 7.181818181818182,
+   "scored_windows": 2342,
+   "unscored_windows": 385,
+   "alert_matrices": {
+    "1": {
+     "forecast": {
+      "matrix": [
+       [
+        1742,
+        269
+       ],
+       [
+        188,
+        143
+       ]
+      ],
+      "precision": 0.3470873786407767,
+      "recall": 0.43202416918429004,
+      "specificity": 0.8662357036300348
+     },
+     "persistence": {
+      "matrix": [
+       [
+        1857,
+        154
+       ],
+       [
+        177,
+        154
+       ]
+      ],
+      "precision": 0.5,
+      "recall": 0.4652567975830816,
+      "specificity": 0.9234211834908006
+     },
+     "fixed_distance": {
+      "matrix": [
+       [
+        1891,
+        120
+       ],
+       [
+        193,
+        138
+       ]
+      ],
+      "precision": 0.5348837209302325,
+      "recall": 0.4169184290030212,
+      "specificity": 0.9403281949278965
+     },
+     "forecast_from_below_threshold": {
+      "matrix": [
+       [
+        1679,
+        178
+       ],
+       [
+        125,
+        52
+       ]
+      ],
+      "precision": 0.22608695652173913,
+      "recall": 0.2937853107344633,
+      "specificity": 0.9041464728056005
+     }
+    },
+    "2": {
+     "forecast": {
+      "matrix": [
+       [
+        2185,
+        62
+       ],
+       [
+        94,
+        1
+       ]
+      ],
+      "precision": 0.015873015873015872,
+      "recall": 0.010526315789473684,
+      "specificity": 0.9724076546506453
+     },
+     "persistence": {
+      "matrix": [
+       [
+        2227,
+        20
+       ],
+       [
+        86,
+        9
+       ]
+      ],
+      "precision": 0.3103448275862069,
+      "recall": 0.09473684210526316,
+      "specificity": 0.991099243435692
+     },
+     "fixed_distance": {
+      "matrix": [
+       [
+        2042,
+        205
+       ],
+       [
+        42,
+        53
+       ]
+      ],
+      "precision": 0.2054263565891473,
+      "recall": 0.5578947368421052,
+      "specificity": 0.9087672452158434
+     },
+     "forecast_from_below_threshold": {
+      "matrix": [
+       [
+        2169,
+        58
+       ],
+       [
+        86,
+        0
+       ]
+      ],
+      "precision": 0.0,
+      "recall": 0.0,
+      "specificity": 0.9739559946115851
+     }
+    },
+    "3": {
+     "forecast": {
+      "matrix": [
+       [
+        2257,
+        26
+       ],
+       [
+        59,
+        0
+       ]
+      ],
+      "precision": 0.0,
+      "recall": 0.0,
+      "specificity": 0.9886114761279019
+     },
+     "persistence": {
+      "matrix": [
+       [
+        2275,
+        8
+       ],
+       [
+        57,
+        2
+       ]
+      ],
+      "precision": 0.2,
+      "recall": 0.03389830508474576,
+      "specificity": 0.9964958388085852
+     },
+     "fixed_distance": {
+      "matrix": [
+       [
+        2055,
+        228
+       ],
+       [
+        29,
+        30
+       ]
+      ],
+      "precision": 0.11627906976744186,
+      "recall": 0.5084745762711864,
+      "specificity": 0.900131406044678
+     },
+     "forecast_from_below_threshold": {
+      "matrix": [
+       [
+        2250,
+        25
+       ],
+       [
+        57,
+        0
+       ]
+      ],
+      "precision": 0.0,
+      "recall": 0.0,
+      "specificity": 0.989010989010989
+     }
+    }
+   },
+   "base_rate_1": 0.14133219470538003,
+   "ap_model_1": 0.3295287309362344,
+   "ap_persist_1": 0.30820482919290715,
+   "ece_1": 0.1265542314416745,
+   "base_rate_2": 0.040563620836891544,
+   "ap_model_2": 0.03997259587694901,
+   "ap_persist_2": 0.06612184042366878,
+   "ece_2": 0.061055090008973294,
+   "base_rate_3": 0.02519214346712212,
+   "ap_model_3": 0.033367479420191366,
+   "ap_persist_3": 0.031117833519084082,
+   "ece_3": 0.025703868141490765,
+   "ordinal_matrix": [
+    [
+     1806,
+     162,
+     24,
+     19
+    ],
+    [
+     158,
+     62,
+     3,
+     13
+    ],
+    [
+     19,
+     17,
+     0,
+     0
+    ],
+    [
+     26,
+     33,
+     0,
+     0
+    ]
+   ],
+   "mae_model": 0.3799592557944129,
+   "mae_persist": 0.2143467122117848,
+   "conf_set_windows": 2342,
+   "conf_coverage": 0.816396242527754,
+   "conf_avg_size": 1.7348420153714774,
+   "ordinary_trips": 0,
+   "false_alarms_per_trip_forecast": null,
+   "alerts_per_hour_forecast": null,
+   "trips_with_alarm_forecast": null,
+   "false_alarms_per_trip_persist": null,
+   "alerts_per_hour_persist": null,
+   "trips_with_alarm_persist": null,
+   "false_alarms_per_trip_fixed": null,
+   "alerts_per_hour_fixed": null,
+   "trips_with_alarm_fixed": null
+  }
+ },
+ "common_trips": 55,
+ "base_evaluation": {
+  "trips": 55,
+  "rows": 2727,
+  "mean_history_trips": 32.0,
+  "scored_windows": 2342,
+  "unscored_windows": 385,
+  "alert_matrices": {
+   "1": {
+    "forecast": {
+     "matrix": [
+      [
+       1956,
+       55
+      ],
+      [
+       266,
+       65
+      ]
+     ],
+     "precision": 0.5416666666666666,
+     "recall": 0.19637462235649547,
+     "specificity": 0.9726504226752859
+    },
+    "persistence": {
+     "matrix": [
+      [
+       1978,
+       33
+      ],
+      [
+       204,
+       127
+      ]
+     ],
+     "precision": 0.79375,
+     "recall": 0.38368580060422963,
+     "specificity": 0.9835902536051716
+    },
+    "fixed_distance": {
+     "matrix": [
+      [
+       1891,
+       120
+      ],
+      [
+       193,
+       138
+      ]
+     ],
+     "precision": 0.5348837209302325,
+     "recall": 0.4169184290030212,
+     "specificity": 0.9403281949278965
+    },
+    "forecast_from_below_threshold": {
+     "matrix": [
+      [
+       1930,
+       48
+      ],
+      [
+       176,
+       28
+      ]
+     ],
+     "precision": 0.3684210526315789,
+     "recall": 0.13725490196078433,
+     "specificity": 0.9757330637007078
+    }
+   },
+   "2": {
+    "forecast": {
+     "matrix": [
+      [
+       2221,
+       26
+      ],
+      [
+       94,
+       1
+      ]
+     ],
+     "precision": 0.037037037037037035,
+     "recall": 0.010526315789473684,
+     "specificity": 0.9884290164663997
+    },
+    "persistence": {
+     "matrix": [
+      [
+       2237,
+       10
+      ],
+      [
+       56,
+       39
+      ]
+     ],
+     "precision": 0.7959183673469388,
+     "recall": 0.4105263157894737,
+     "specificity": 0.995549621717846
+    },
+    "fixed_distance": {
+     "matrix": [
+      [
+       2042,
+       205
+      ],
+      [
+       42,
+       53
+      ]
+     ],
+     "precision": 0.2054263565891473,
+     "recall": 0.5578947368421052,
+     "specificity": 0.9087672452158434
+    },
+    "forecast_from_below_threshold": {
+     "matrix": [
+      [
+       2212,
+       25
+      ],
+      [
+       56,
+       0
+      ]
+     ],
+     "precision": 0.0,
+     "recall": 0.0,
+     "specificity": 0.9888243182834153
+    }
+   },
+   "3": {
+    "forecast": {
+     "matrix": [
+      [
+       2275,
+       8
+      ],
+      [
+       59,
+       0
+      ]
+     ],
+     "precision": 0.0,
+     "recall": 0.0,
+     "specificity": 0.9964958388085852
+    },
+    "persistence": {
+     "matrix": [
+      [
+       2277,
+       6
+      ],
+      [
+       34,
+       25
+      ]
+     ],
+     "precision": 0.8064516129032258,
+     "recall": 0.423728813559322,
+     "specificity": 0.9973718791064389
+    },
+    "fixed_distance": {
+     "matrix": [
+      [
+       2055,
+       228
+      ],
+      [
+       29,
+       30
+      ]
+     ],
+     "precision": 0.11627906976744186,
+     "recall": 0.5084745762711864,
+     "specificity": 0.900131406044678
+    },
+    "forecast_from_below_threshold": {
+     "matrix": [
+      [
+       2269,
+       8
+      ],
+      [
+       34,
+       0
+      ]
+     ],
+     "precision": 0.0,
+     "recall": 0.0,
+     "specificity": 0.9964866051822574
+    }
+   }
+  },
+  "base_rate_1": 0.14133219470538003,
+  "ap_model_1": 0.36070861100961943,
+  "ap_persist_1": 0.3916556426583007,
+  "ece_1": 0.03973004695225641,
+  "base_rate_2": 0.040563620836891544,
+  "ap_model_2": 0.10760404545464698,
+  "ap_persist_2": 0.35065662203575304,
+  "ece_2": 0.00998157201662811,
+  "base_rate_3": 0.02519214346712212,
+  "ap_model_3": 0.08967950474371184,
+  "ap_persist_3": 0.3562342915332677,
+  "ece_3": 0.01073228877316816,
+  "ordinal_matrix": [
+   [
+    1975,
+    25,
+    8,
+    3
+   ],
+   [
+    189,
+    33,
+    4,
+    10
+   ],
+   [
+    30,
+    6,
+    0,
+    0
+   ],
+   [
+    59,
+    0,
+    0,
+    0
+   ]
+  ],
+  "mae_model": 0.28764452454469497,
+  "mae_persist": 0.14645602049530315,
+  "conf_set_windows": 2342,
+  "conf_coverage": 0.829205807002562,
+  "conf_avg_size": 1.5469684030742954,
+  "ordinary_trips": 0,
+  "false_alarms_per_trip_forecast": null,
+  "alerts_per_hour_forecast": null,
+  "trips_with_alarm_forecast": null,
+  "false_alarms_per_trip_persist": null,
+  "alerts_per_hour_persist": null,
+  "trips_with_alarm_persist": null,
+  "false_alarms_per_trip_fixed": null,
+  "alerts_per_hour_fixed": null,
+  "trips_with_alarm_fixed": null
+ },
+ "history_curve": [
+  {
+   "history": "5-9",
+   "trips": 5,
+   "rows": 225,
+   "mean_history_trips": 7.0,
+   "scored_windows": 190,
+   "unscored_windows": 35,
+   "alert_matrices": {
+    "1": {
+     "forecast": {
+      "matrix": [
+       [
+        105,
+        8
+       ],
+       [
+        42,
+        35
+       ]
+      ],
+      "precision": 0.813953488372093,
+      "recall": 0.45454545454545453,
+      "specificity": 0.9292035398230089
+     },
+     "persistence": {
+      "matrix": [
+       [
+        107,
+        6
+       ],
+       [
+        40,
+        37
+       ]
+      ],
+      "precision": 0.8604651162790697,
+      "recall": 0.4805194805194805,
+      "specificity": 0.9469026548672567
+     },
+     "fixed_distance": {
+      "matrix": [
+       [
+        111,
+        2
+       ],
+       [
+        45,
+        32
+       ]
+      ],
+      "precision": 0.9411764705882353,
+      "recall": 0.4155844155844156,
+      "specificity": 0.9823008849557522
+     },
+     "forecast_from_below_threshold": {
+      "matrix": [
+       [
+        102,
+        5
+       ],
+       [
+        26,
+        14
+       ]
+      ],
+      "precision": 0.7368421052631579,
+      "recall": 0.35,
+      "specificity": 0.9532710280373832
+     }
+    },
+    "2": {
+     "forecast": {
+      "matrix": [
+       [
+        159,
+        16
+       ],
+       [
+        14,
+        1
+       ]
+      ],
+      "precision": 0.058823529411764705,
+      "recall": 0.06666666666666667,
+      "specificity": 0.9085714285714286
+     },
+     "persistence": {
+      "matrix": [
+       [
+        173,
+        2
+       ],
+       [
+        12,
+        3
+       ]
+      ],
+      "precision": 0.6,
+      "recall": 0.2,
+      "specificity": 0.9885714285714285
+     },
+     "fixed_distance": {
+      "matrix": [
+       [
+        148,
+        27
+       ],
+       [
+        8,
+        7
+       ]
+      ],
+      "precision": 0.20588235294117646,
+      "recall": 0.4666666666666667,
+      "specificity": 0.8457142857142858
+     },
+     "forecast_from_below_threshold": {
+      "matrix": [
+       [
+        158,
+        15
+       ],
+       [
+        12,
+        0
+       ]
+      ],
+      "precision": 0.0,
+      "recall": 0.0,
+      "specificity": 0.9132947976878613
+     }
+    },
+    "3": {
+     "forecast": {
+      "matrix": [
+       [
+        174,
+        8
+       ],
+       [
+        8,
+        0
+       ]
+      ],
+      "precision": 0.0,
+      "recall": 0.0,
+      "specificity": 0.9560439560439561
+     },
+     "persistence": {
+      "matrix": [
+       [
+        181,
+        1
+       ],
+       [
+        6,
+        2
+       ]
+      ],
+      "precision": 0.6666666666666666,
+      "recall": 0.25,
+      "specificity": 0.9945054945054945
+     },
+     "fixed_distance": {
+      "matrix": [
+       [
+        148,
+        34
+       ],
+       [
+        8,
+        0
+       ]
+      ],
+      "precision": 0.0,
+      "recall": 0.0,
+      "specificity": 0.8131868131868132
+     },
+     "forecast_from_below_threshold": {
+      "matrix": [
+       [
+        173,
+        8
+       ],
+       [
+        6,
+        0
+       ]
+      ],
+      "precision": 0.0,
+      "recall": 0.0,
+      "specificity": 0.9558011049723757
+     }
+    }
+   },
+   "base_rate_1": 0.4052631578947368,
+   "ap_model_1": 0.7951304901866565,
+   "ap_persist_1": 0.6239965664690267,
+   "ece_1": 0.15813962355769992,
+   "base_rate_2": 0.07894736842105263,
+   "ap_model_2": 0.13383013425466972,
+   "ap_persist_2": 0.1831578947368421,
+   "ece_2": 0.09069416040897761,
+   "base_rate_3": 0.042105263157894736,
+   "ap_model_3": 0.17403126088470916,
+   "ap_persist_3": 0.19824561403508772,
+   "ece_3": 0.06899497570518992,
+   "ordinal_matrix": [
+    [
+     107,
+     3,
+     0,
+     3
+    ],
+    [
+     40,
+     9,
+     3,
+     10
+    ],
+    [
+     1,
+     6,
+     0,
+     0
+    ],
+    [
+     8,
+     0,
+     0,
+     0
+    ]
+   ],
+   "mae_model": 0.4635908110868753,
+   "mae_persist": 0.3526315789473684,
+   "conf_set_windows": 190,
+   "conf_coverage": 0.8736842105263158,
+   "conf_avg_size": 2.5157894736842104,
+   "ordinary_trips": 0,
+   "false_alarms_per_trip_forecast": null,
+   "alerts_per_hour_forecast": null,
+   "trips_with_alarm_forecast": null,
+   "false_alarms_per_trip_persist": null,
+   "alerts_per_hour_persist": null,
+   "trips_with_alarm_persist": null,
+   "false_alarms_per_trip_fixed": null,
+   "alerts_per_hour_fixed": null,
+   "trips_with_alarm_fixed": null
+  },
+  {
+   "history": "10-19",
+   "trips": 10,
+   "rows": 502,
+   "mean_history_trips": 14.5,
+   "scored_windows": 432,
+   "unscored_windows": 70,
+   "alert_matrices": {
+    "1": {
+     "forecast": {
+      "matrix": [
+       [
+        323,
+        27
+       ],
+       [
+        62,
+        20
+       ]
+      ],
+      "precision": 0.425531914893617,
+      "recall": 0.24390243902439024,
+      "specificity": 0.9228571428571428
+     },
+     "persistence": {
+      "matrix": [
+       [
+        340,
+        10
+       ],
+       [
+        59,
+        23
+       ]
+      ],
+      "precision": 0.696969696969697,
+      "recall": 0.2804878048780488,
+      "specificity": 0.9714285714285714
+     },
+     "fixed_distance": {
+      "matrix": [
+       [
+        340,
+        10
+       ],
+       [
+        58,
+        24
+       ]
+      ],
+      "precision": 0.7058823529411765,
+      "recall": 0.2926829268292683,
+      "specificity": 0.9714285714285714
+     },
+     "forecast_from_below_threshold": {
+      "matrix": [
+       [
+        316,
+        24
+       ],
+       [
+        50,
+        9
+       ]
+      ],
+      "precision": 0.2727272727272727,
+      "recall": 0.15254237288135594,
+      "specificity": 0.9294117647058824
+     }
+    },
+    "2": {
+     "forecast": {
+      "matrix": [
+       [
+        420,
+        6
+       ],
+       [
+        6,
+        0
+       ]
+      ],
+      "precision": 0.0,
+      "recall": 0.0,
+      "specificity": 0.9859154929577465
+     },
+     "persistence": {
+      "matrix": [
+       [
+        425,
+        1
+       ],
+       [
+        6,
+        0
+       ]
+      ],
+      "precision": 0.0,
+      "recall": 0.0,
+      "specificity": 0.9976525821596244
+     },
+     "fixed_distance": {
+      "matrix": [
+       [
+        392,
+        34
+       ],
+       [
+        6,
+        0
+       ]
+      ],
+      "precision": 0.0,
+      "recall": 0.0,
+      "specificity": 0.92018779342723
+     },
+     "forecast_from_below_threshold": {
+      "matrix": [
+       [
+        419,
+        6
+       ],
+       [
+        6,
+        0
+       ]
+      ],
+      "precision": 0.0,
+      "recall": 0.0,
+      "specificity": 0.9858823529411764
+     }
+    },
+    "3": {
+     "forecast": {
+      "matrix": [
+       [
+        432,
+        0
+       ],
+       [
+        0,
+        0
+       ]
+      ],
+      "precision": null,
+      "recall": null,
+      "specificity": 1.0
+     },
+     "persistence": {
+      "matrix": [
+       [
+        432,
+        0
+       ],
+       [
+        0,
+        0
+       ]
+      ],
+      "precision": null,
+      "recall": null,
+      "specificity": 1.0
+     },
+     "fixed_distance": {
+      "matrix": [
+       [
+        398,
+        34
+       ],
+       [
+        0,
+        0
+       ]
+      ],
+      "precision": 0.0,
+      "recall": null,
+      "specificity": 0.9212962962962963
+     },
+     "forecast_from_below_threshold": {
+      "matrix": [
+       [
+        432,
+        0
+       ],
+       [
+        0,
+        0
+       ]
+      ],
+      "precision": null,
+      "recall": null,
+      "specificity": 1.0
+     }
+    }
+   },
+   "base_rate_1": 0.18981481481481483,
+   "ap_model_1": 0.3510797024683696,
+   "ap_persist_1": 0.3320655744436233,
+   "ece_1": 0.12026703738624975,
+   "base_rate_2": 0.013888888888888888,
+   "ap_model_2": 0.051820904417483556,
+   "ap_persist_2": 0.013888888888888888,
+   "ece_2": 0.04247894261527925,
+   "base_rate_3": 0.0,
+   "ap_model_3": null,
+   "ap_persist_3": null,
+   "ece_3": 0.02661573662375986,
+   "ordinal_matrix": [
+    [
+     332,
+     12,
+     6,
+     0
+    ],
+    [
+     57,
+     19,
+     0,
+     0
+    ],
+    [
+     6,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "mae_model": 0.29960187593741466,
+   "mae_persist": 0.17592592592592593,
+   "conf_set_windows": 432,
+   "conf_coverage": 0.8495370370370371,
+   "conf_avg_size": 1.7407407407407407,
+   "ordinary_trips": 0,
+   "false_alarms_per_trip_forecast": null,
+   "alerts_per_hour_forecast": null,
+   "trips_with_alarm_forecast": null,
+   "false_alarms_per_trip_persist": null,
+   "alerts_per_hour_persist": null,
+   "trips_with_alarm_persist": null,
+   "false_alarms_per_trip_fixed": null,
+   "alerts_per_hour_fixed": null,
+   "trips_with_alarm_fixed": null
+  },
+  {
+   "history": "20-29",
+   "trips": 10,
+   "rows": 462,
+   "mean_history_trips": 24.5,
+   "scored_windows": 392,
+   "unscored_windows": 70,
+   "alert_matrices": {
+    "1": {
+     "forecast": {
+      "matrix": [
+       [
+        363,
+        2
+       ],
+       [
+        27,
+        0
+       ]
+      ],
+      "precision": 0.0,
+      "recall": 0.0,
+      "specificity": 0.9945205479452055
+     },
+     "persistence": {
+      "matrix": [
+       [
+        363,
+        2
+       ],
+       [
+        18,
+        9
+       ]
+      ],
+      "precision": 0.8181818181818182,
+      "recall": 0.3333333333333333,
+      "specificity": 0.9945205479452055
+     },
+     "fixed_distance": {
+      "matrix": [
+       [
+        353,
+        12
+       ],
+       [
+        9,
+        18
+       ]
+      ],
+      "precision": 0.6,
+      "recall": 0.6666666666666666,
+      "specificity": 0.9671232876712329
+     },
+     "forecast_from_below_threshold": {
+      "matrix": [
+       [
+        361,
+        2
+       ],
+       [
+        18,
+        0
+       ]
+      ],
+      "precision": 0.0,
+      "recall": 0.0,
+      "specificity": 0.9944903581267218
+     }
+    },
+    "2": {
+     "forecast": {
+      "matrix": [
+       [
+        384,
+        0
+       ],
+       [
+        8,
+        0
+       ]
+      ],
+      "precision": null,
+      "recall": 0.0,
+      "specificity": 1.0
+     },
+     "persistence": {
+      "matrix": [
+       [
+        383,
+        1
+       ],
+       [
+        6,
+        2
+       ]
+      ],
+      "precision": 0.6666666666666666,
+      "recall": 0.25,
+      "specificity": 0.9973958333333334
+     },
+     "fixed_distance": {
+      "matrix": [
+       [
+        362,
+        22
+       ],
+       [
+        0,
+        8
+       ]
+      ],
+      "precision": 0.26666666666666666,
+      "recall": 1.0,
+      "specificity": 0.9427083333333334
+     },
+     "forecast_from_below_threshold": {
+      "matrix": [
+       [
+        383,
+        0
+       ],
+       [
+        6,
+        0
+       ]
+      ],
+      "precision": null,
+      "recall": 0.0,
+      "specificity": 1.0
+     }
+    },
+    "3": {
+     "forecast": {
+      "matrix": [
+       [
+        392,
+        0
+       ],
+       [
+        0,
+        0
+       ]
+      ],
+      "precision": null,
+      "recall": null,
+      "specificity": 1.0
+     },
+     "persistence": {
+      "matrix": [
+       [
+        392,
+        0
+       ],
+       [
+        0,
+        0
+       ]
+      ],
+      "precision": null,
+      "recall": null,
+      "specificity": 1.0
+     },
+     "fixed_distance": {
+      "matrix": [
+       [
+        362,
+        30
+       ],
+       [
+        0,
+        0
+       ]
+      ],
+      "precision": 0.0,
+      "recall": null,
+      "specificity": 0.923469387755102
+     },
+     "forecast_from_below_threshold": {
+      "matrix": [
+       [
+        392,
+        0
+       ],
+       [
+        0,
+        0
+       ]
+      ],
+      "precision": null,
+      "recall": null,
+      "specificity": 1.0
+     }
+    }
+   },
+   "base_rate_1": 0.06887755102040816,
+   "ap_model_1": 0.24956951981210412,
+   "ap_persist_1": 0.3186456400742115,
+   "ece_1": 0.05694897553398824,
+   "base_rate_2": 0.02040816326530612,
+   "ap_model_2": 0.9502840909090909,
+   "ap_persist_2": 0.18197278911564624,
+   "ece_2": 0.027065177728144013,
+   "base_rate_3": 0.0,
+   "ap_model_3": null,
+   "ap_persist_3": null,
+   "ece_3": 0.015673049943722376,
+   "ordinal_matrix": [
+    [
+     363,
+     2,
+     0,
+     0
+    ],
+    [
+     19,
+     0,
+     0,
+     0
+    ],
+    [
+     8,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "mae_model": 0.16372464847087514,
+   "mae_persist": 0.06887755102040816,
+   "conf_set_windows": 392,
+   "conf_coverage": 0.7882653061224489,
+   "conf_avg_size": 1.2551020408163265,
+   "ordinary_trips": 0,
+   "false_alarms_per_trip_forecast": null,
+   "alerts_per_hour_forecast": null,
+   "trips_with_alarm_forecast": null,
+   "false_alarms_per_trip_persist": null,
+   "alerts_per_hour_persist": null,
+   "trips_with_alarm_persist": null,
+   "false_alarms_per_trip_fixed": null,
+   "alerts_per_hour_fixed": null,
+   "trips_with_alarm_fixed": null
+  },
+  {
+   "history": "30-39",
+   "trips": 10,
+   "rows": 528,
+   "mean_history_trips": 34.5,
+   "scored_windows": 458,
+   "unscored_windows": 70,
+   "alert_matrices": {
+    "1": {
+     "forecast": {
+      "matrix": [
+       [
+        412,
+        10
+       ],
+       [
+        34,
+        2
+       ]
+      ],
+      "precision": 0.16666666666666666,
+      "recall": 0.05555555555555555,
+      "specificity": 0.976303317535545
+     },
+     "persistence": {
+      "matrix": [
+       [
+        419,
+        3
+       ],
+       [
+        18,
+        18
+       ]
+      ],
+      "precision": 0.8571428571428571,
+      "recall": 0.5,
+      "specificity": 0.9928909952606635
+     },
+     "fixed_distance": {
+      "matrix": [
+       [
+        382,
+        40
+       ],
+       [
+        19,
+        17
+       ]
+      ],
+      "precision": 0.2982456140350877,
+      "recall": 0.4722222222222222,
+      "specificity": 0.9052132701421801
+     },
+     "forecast_from_below_threshold": {
+      "matrix": [
+       [
+        409,
+        10
+       ],
+       [
+        17,
+        1
+       ]
+      ],
+      "precision": 0.09090909090909091,
+      "recall": 0.05555555555555555,
+      "specificity": 0.9761336515513126
+     }
+    },
+    "2": {
+     "forecast": {
+      "matrix": [
+       [
+        440,
+        3
+       ],
+       [
+        15,
+        0
+       ]
+      ],
+      "precision": 0.0,
+      "recall": 0.0,
+      "specificity": 0.9932279909706546
+     },
+     "persistence": {
+      "matrix": [
+       [
+        442,
+        1
+       ],
+       [
+        4,
+        11
+       ]
+      ],
+      "precision": 0.9166666666666666,
+      "recall": 0.7333333333333333,
+      "specificity": 0.9977426636568849
+     },
+     "fixed_distance": {
+      "matrix": [
+       [
+        398,
+        45
+       ],
+       [
+        3,
+        12
+       ]
+      ],
+      "precision": 0.21052631578947367,
+      "recall": 0.8,
+      "specificity": 0.8984198645598194
+     },
+     "forecast_from_below_threshold": {
+      "matrix": [
+       [
+        439,
+        3
+       ],
+       [
+        4,
+        0
+       ]
+      ],
+      "precision": 0.0,
+      "recall": 0.0,
+      "specificity": 0.9932126696832579
+     }
+    },
+    "3": {
+     "forecast": {
+      "matrix": [
+       [
+        445,
+        0
+       ],
+       [
+        13,
+        0
+       ]
+      ],
+      "precision": null,
+      "recall": 0.0,
+      "specificity": 1.0
+     },
+     "persistence": {
+      "matrix": [
+       [
+        444,
+        1
+       ],
+       [
+        6,
+        7
+       ]
+      ],
+      "precision": 0.875,
+      "recall": 0.5384615384615384,
+      "specificity": 0.9977528089887641
+     },
+     "fixed_distance": {
+      "matrix": [
+       [
+        399,
+        46
+       ],
+       [
+        2,
+        11
+       ]
+      ],
+      "precision": 0.19298245614035087,
+      "recall": 0.8461538461538461,
+      "specificity": 0.8966292134831461
+     },
+     "forecast_from_below_threshold": {
+      "matrix": [
+       [
+        444,
+        0
+       ],
+       [
+        6,
+        0
+       ]
+      ],
+      "precision": null,
+      "recall": 0.0,
+      "specificity": 1.0
+     }
+    }
+   },
+   "base_rate_1": 0.07860262008733625,
+   "ap_model_1": 0.13567258022067183,
+   "ap_persist_1": 0.46787273861509665,
+   "ece_1": 0.05381947017917115,
+   "base_rate_2": 0.03275109170305677,
+   "ap_model_2": 0.023215174962430606,
+   "ap_persist_2": 0.6809558466763707,
+   "ece_2": 0.039213002700947186,
+   "base_rate_3": 0.028384279475982533,
+   "ap_model_3": 0.020865514547314043,
+   "ap_persist_3": 0.48425428283506883,
+   "ece_3": 0.02739182499266564,
+   "ordinal_matrix": [
+    [
+     415,
+     5,
+     2,
+     0
+    ],
+    [
+     19,
+     2,
+     0,
+     0
+    ],
+    [
+     2,
+     0,
+     0,
+     0
+    ],
+    [
+     13,
+     0,
+     0,
+     0
+    ]
+   ],
+   "mae_model": 0.2185937998810936,
+   "mae_persist": 0.07205240174672489,
+   "conf_set_windows": 458,
+   "conf_coverage": 0.7969432314410481,
+   "conf_avg_size": 1.1375545851528384,
+   "ordinary_trips": 0,
+   "false_alarms_per_trip_forecast": null,
+   "alerts_per_hour_forecast": null,
+   "trips_with_alarm_forecast": null,
+   "false_alarms_per_trip_persist": null,
+   "alerts_per_hour_persist": null,
+   "trips_with_alarm_persist": null,
+   "false_alarms_per_trip_fixed": null,
+   "alerts_per_hour_fixed": null,
+   "trips_with_alarm_fixed": null
+  },
+  {
+   "history": "40+",
+   "trips": 20,
+   "rows": 1010,
+   "mean_history_trips": 49.5,
+   "scored_windows": 870,
+   "unscored_windows": 140,
+   "alert_matrices": {
+    "1": {
+     "forecast": {
+      "matrix": [
+       [
+        753,
+        8
+       ],
+       [
+        101,
+        8
+       ]
+      ],
+      "precision": 0.5,
+      "recall": 0.07339449541284404,
+      "specificity": 0.9894875164257556
+     },
+     "persistence": {
+      "matrix": [
+       [
+        749,
+        12
+       ],
+       [
+        69,
+        40
+       ]
+      ],
+      "precision": 0.7692307692307693,
+      "recall": 0.3669724770642202,
+      "specificity": 0.9842312746386334
+     },
+     "fixed_distance": {
+      "matrix": [
+       [
+        705,
+        56
+       ],
+       [
+        62,
+        47
+       ]
+      ],
+      "precision": 0.4563106796116505,
+      "recall": 0.43119266055045874,
+      "specificity": 0.926412614980289
+     },
+     "forecast_from_below_threshold": {
+      "matrix": [
+       [
+        742,
+        7
+       ],
+       [
+        65,
+        4
+       ]
+      ],
+      "precision": 0.36363636363636365,
+      "recall": 0.057971014492753624,
+      "specificity": 0.9906542056074766
+     }
+    },
+    "2": {
+     "forecast": {
+      "matrix": [
+       [
+        818,
+        1
+       ],
+       [
+        51,
+        0
+       ]
+      ],
+      "precision": 0.0,
+      "recall": 0.0,
+      "specificity": 0.9987789987789988
+     },
+     "persistence": {
+      "matrix": [
+       [
+        814,
+        5
+       ],
+       [
+        28,
+        23
+       ]
+      ],
+      "precision": 0.8214285714285714,
+      "recall": 0.45098039215686275,
+      "specificity": 0.9938949938949939
+     },
+     "fixed_distance": {
+      "matrix": [
+       [
+        742,
+        77
+       ],
+       [
+        25,
+        26
+       ]
+      ],
+      "precision": 0.2524271844660194,
+      "recall": 0.5098039215686274,
+      "specificity": 0.905982905982906
+     },
+     "forecast_from_below_threshold": {
+      "matrix": [
+       [
+        813,
+        1
+       ],
+       [
+        28,
+        0
+       ]
+      ],
+      "precision": 0.0,
+      "recall": 0.0,
+      "specificity": 0.9987714987714987
+     }
+    },
+    "3": {
+     "forecast": {
+      "matrix": [
+       [
+        832,
+        0
+       ],
+       [
+        38,
+        0
+       ]
+      ],
+      "precision": null,
+      "recall": 0.0,
+      "specificity": 1.0
+     },
+     "persistence": {
+      "matrix": [
+       [
+        828,
+        4
+       ],
+       [
+        22,
+        16
+       ]
+      ],
+      "precision": 0.8,
+      "recall": 0.42105263157894735,
+      "specificity": 0.9951923076923077
+     },
+     "fixed_distance": {
+      "matrix": [
+       [
+        748,
+        84
+       ],
+       [
+        19,
+        19
+       ]
+      ],
+      "precision": 0.18446601941747573,
+      "recall": 0.5,
+      "specificity": 0.8990384615384616
+     },
+     "forecast_from_below_threshold": {
+      "matrix": [
+       [
+        828,
+        0
+       ],
+       [
+        22,
+        0
+       ]
+      ],
+      "precision": null,
+      "recall": 0.0,
+      "specificity": 1.0
+     }
+    }
+   },
+   "base_rate_1": 0.12528735632183907,
+   "ap_model_1": 0.2565887975812228,
+   "ap_persist_1": 0.3615968656462171,
+   "ece_1": 0.036092322453021485,
+   "base_rate_2": 0.05862068965517241,
+   "ap_model_2": 0.17829552270995255,
+   "ap_persist_2": 0.40263208731768574,
+   "ece_2": 0.02207844063596821,
+   "base_rate_3": 0.04367816091954023,
+   "ap_model_3": 0.17666411638453294,
+   "ap_persist_3": 0.362129461584997,
+   "ece_3": 0.013112167280499193,
+   "ordinal_matrix": [
+    [
+     758,
+     3,
+     0,
+     0
+    ],
+    [
+     54,
+     3,
+     1,
+     0
+    ],
+    [
+     13,
+     0,
+     0,
+     0
+    ],
+    [
+     38,
+     0,
+     0,
+     0
+    ]
+   ],
+   "mae_model": 0.335468033823083,
+   "mae_persist": 0.16091954022988506,
+   "conf_set_windows": 870,
+   "conf_coverage": 0.8448275862068966,
+   "conf_avg_size": 1.5862068965517242,
+   "ordinary_trips": 0,
+   "false_alarms_per_trip_forecast": null,
+   "alerts_per_hour_forecast": null,
+   "trips_with_alarm_forecast": null,
+   "false_alarms_per_trip_persist": null,
+   "alerts_per_hour_persist": null,
+   "trips_with_alarm_persist": null,
+   "false_alarms_per_trip_fixed": null,
+   "alerts_per_hour_fixed": null,
+   "trips_with_alarm_fixed": null
+  }
+ ],
+ "by_direction": {
+  "A to B": {
+   "trips": 27,
+   "rows": 1270,
+   "mean_history_trips": 32.0,
+   "scored_windows": 1081,
+   "unscored_windows": 189,
+   "alert_matrices": {
+    "1": {
+     "forecast": {
+      "matrix": [
+       [
+        889,
+        47
+       ],
+       [
+        105,
+        40
+       ]
+      ],
+      "precision": 0.45977011494252873,
+      "recall": 0.27586206896551724,
+      "specificity": 0.9497863247863247
+     },
+     "persistence": {
+      "matrix": [
+       [
+        922,
+        14
+       ],
+       [
+        95,
+        50
+       ]
+      ],
+      "precision": 0.78125,
+      "recall": 0.3448275862068966,
+      "specificity": 0.9850427350427351
+     },
+     "fixed_distance": {
+      "matrix": [
+       [
+        882,
+        54
+       ],
+       [
+        97,
+        48
+       ]
+      ],
+      "precision": 0.47058823529411764,
+      "recall": 0.3310344827586207,
+      "specificity": 0.9423076923076923
+     },
+     "forecast_from_below_threshold": {
+      "matrix": [
+       [
+        881,
+        41
+       ],
+       [
+        80,
+        15
+       ]
+      ],
+      "precision": 0.26785714285714285,
+      "recall": 0.15789473684210525,
+      "specificity": 0.955531453362256
+     }
+    },
+    "2": {
+     "forecast": {
+      "matrix": [
+       [
+        1023,
+        25
+       ],
+       [
+        32,
+        1
+       ]
+      ],
+      "precision": 0.038461538461538464,
+      "recall": 0.030303030303030304,
+      "specificity": 0.976145038167939
+     },
+     "persistence": {
+      "matrix": [
+       [
+        1044,
+        4
+       ],
+       [
+        24,
+        9
+       ]
+      ],
+      "precision": 0.6923076923076923,
+      "recall": 0.2727272727272727,
+      "specificity": 0.9961832061068703
+     },
+     "fixed_distance": {
+      "matrix": [
+       [
+        966,
+        82
+       ],
+       [
+        13,
+        20
+       ]
+      ],
+      "precision": 0.19607843137254902,
+      "recall": 0.6060606060606061,
+      "specificity": 0.9217557251908397
+     },
+     "forecast_from_below_threshold": {
+      "matrix": [
+       [
+        1020,
+        24
+       ],
+       [
+        24,
+        0
+       ]
+      ],
+      "precision": 0.0,
+      "recall": 0.0,
+      "specificity": 0.9770114942528736
+     }
+    },
+    "3": {
+     "forecast": {
+      "matrix": [
+       [
+        1056,
+        8
+       ],
+       [
+        17,
+        0
+       ]
+      ],
+      "precision": 0.0,
+      "recall": 0.0,
+      "specificity": 0.9924812030075187
+     },
+     "persistence": {
+      "matrix": [
+       [
+        1062,
+        2
+       ],
+       [
+        12,
+        5
+       ]
+      ],
+      "precision": 0.7142857142857143,
+      "recall": 0.29411764705882354,
+      "specificity": 0.9981203007518797
+     },
+     "fixed_distance": {
+      "matrix": [
+       [
+        966,
+        98
+       ],
+       [
+        13,
+        4
+       ]
+      ],
+      "precision": 0.0392156862745098,
+      "recall": 0.23529411764705882,
+      "specificity": 0.9078947368421053
+     },
+     "forecast_from_below_threshold": {
+      "matrix": [
+       [
+        1054,
+        8
+       ],
+       [
+        12,
+        0
+       ]
+      ],
+      "precision": 0.0,
+      "recall": 0.0,
+      "specificity": 0.992467043314501
+     }
+    }
+   },
+   "base_rate_1": 0.1341350601295097,
+   "ap_model_1": 0.3639050355033205,
+   "ap_persist_1": 0.3572781428434719,
+   "ece_1": 0.039433330957401695,
+   "base_rate_2": 0.030527289546716005,
+   "ap_model_2": 0.10502494219554018,
+   "ap_persist_2": 0.21101285393607316,
+   "ece_2": 0.03731021301675054,
+   "base_rate_3": 0.01572617946345976,
+   "ap_model_3": 0.09895409428042694,
+   "ap_persist_3": 0.22118486617588756,
+   "ece_3": 0.019940528758197535,
+   "ordinal_matrix": [
+    [
+     905,
+     20,
+     8,
+     3
+    ],
+    [
+     86,
+     12,
+     4,
+     10
+    ],
+    [
+     10,
+     6,
+     0,
+     0
+    ],
+    [
+     17,
+     0,
+     0,
+     0
+    ]
+   ],
+   "mae_model": 0.29394667903303373,
+   "mae_persist": 0.1396854764107308,
+   "conf_set_windows": 1081,
+   "conf_coverage": 0.8159111933395005,
+   "conf_avg_size": 1.7909343200740055,
+   "ordinary_trips": 0,
+   "false_alarms_per_trip_forecast": null,
+   "alerts_per_hour_forecast": null,
+   "trips_with_alarm_forecast": null,
+   "false_alarms_per_trip_persist": null,
+   "alerts_per_hour_persist": null,
+   "trips_with_alarm_persist": null,
+   "false_alarms_per_trip_fixed": null,
+   "alerts_per_hour_fixed": null,
+   "trips_with_alarm_fixed": null
+  },
+  "B to A": {
+   "trips": 28,
+   "rows": 1457,
+   "mean_history_trips": 32.0,
+   "scored_windows": 1261,
+   "unscored_windows": 196,
+   "alert_matrices": {
+    "1": {
+     "forecast": {
+      "matrix": [
+       [
+        1067,
+        8
+       ],
+       [
+        161,
+        25
+       ]
+      ],
+      "precision": 0.7575757575757576,
+      "recall": 0.13440860215053763,
+      "specificity": 0.9925581395348837
+     },
+     "persistence": {
+      "matrix": [
+       [
+        1056,
+        19
+       ],
+       [
+        109,
+        77
+       ]
+      ],
+      "precision": 0.8020833333333334,
+      "recall": 0.41397849462365593,
+      "specificity": 0.9823255813953489
+     },
+     "fixed_distance": {
+      "matrix": [
+       [
+        1009,
+        66
+       ],
+       [
+        96,
+        90
+       ]
+      ],
+      "precision": 0.5769230769230769,
+      "recall": 0.4838709677419355,
+      "specificity": 0.9386046511627907
+     },
+     "forecast_from_below_threshold": {
+      "matrix": [
+       [
+        1049,
+        7
+       ],
+       [
+        96,
+        13
+       ]
+      ],
+      "precision": 0.65,
+      "recall": 0.11926605504587157,
+      "specificity": 0.9933712121212122
+     }
+    },
+    "2": {
+     "forecast": {
+      "matrix": [
+       [
+        1198,
+        1
+       ],
+       [
+        62,
+        0
+       ]
+      ],
+      "precision": 0.0,
+      "recall": 0.0,
+      "specificity": 0.9991659716430359
+     },
+     "persistence": {
+      "matrix": [
+       [
+        1193,
+        6
+       ],
+       [
+        32,
+        30
+       ]
+      ],
+      "precision": 0.8333333333333334,
+      "recall": 0.4838709677419355,
+      "specificity": 0.9949958298582152
+     },
+     "fixed_distance": {
+      "matrix": [
+       [
+        1076,
+        123
+       ],
+       [
+        29,
+        33
+       ]
+      ],
+      "precision": 0.21153846153846154,
+      "recall": 0.532258064516129,
+      "specificity": 0.8974145120934112
+     },
+     "forecast_from_below_threshold": {
+      "matrix": [
+       [
+        1192,
+        1
+       ],
+       [
+        32,
+        0
+       ]
+      ],
+      "precision": 0.0,
+      "recall": 0.0,
+      "specificity": 0.9991617770326907
+     }
+    },
+    "3": {
+     "forecast": {
+      "matrix": [
+       [
+        1219,
+        0
+       ],
+       [
+        42,
+        0
+       ]
+      ],
+      "precision": null,
+      "recall": 0.0,
+      "specificity": 1.0
+     },
+     "persistence": {
+      "matrix": [
+       [
+        1215,
+        4
+       ],
+       [
+        22,
+        20
+       ]
+      ],
+      "precision": 0.8333333333333334,
+      "recall": 0.47619047619047616,
+      "specificity": 0.9967186218211649
+     },
+     "fixed_distance": {
+      "matrix": [
+       [
+        1089,
+        130
+       ],
+       [
+        16,
+        26
+       ]
+      ],
+      "precision": 0.16666666666666666,
+      "recall": 0.6190476190476191,
+      "specificity": 0.8933552091878589
+     },
+     "forecast_from_below_threshold": {
+      "matrix": [
+       [
+        1215,
+        0
+       ],
+       [
+        22,
+        0
+       ]
+      ],
+      "precision": null,
+      "recall": 0.0,
+      "specificity": 1.0
+     }
+    }
+   },
+   "base_rate_1": 0.14750198255352895,
+   "ap_model_1": 0.4053194910185616,
+   "ap_persist_1": 0.4184845847580716,
+   "ece_1": 0.05890772198067352,
+   "base_rate_2": 0.04916732751784298,
+   "ap_model_2": 0.14562888986531553,
+   "ap_persist_2": 0.42860249162211256,
+   "ece_2": 0.02151051990815993,
+   "base_rate_3": 0.03330689928628073,
+   "ap_model_3": 0.14087230856997776,
+   "ap_persist_3": 0.4142718678801153,
+   "ece_3": 0.017174069399778728,
+   "ordinal_matrix": [
+    [
+     1070,
+     5,
+     0,
+     0
+    ],
+    [
+     103,
+     21,
+     0,
+     0
+    ],
+    [
+     20,
+     0,
+     0,
+     0
+    ],
+    [
+     42,
+     0,
+     0,
+     0
+    ]
+   ],
+   "mae_model": 0.28224196387705475,
+   "mae_persist": 0.1522601110229976,
+   "conf_set_windows": 1261,
+   "conf_coverage": 0.8406026962727994,
+   "conf_avg_size": 1.3378271213322759,
+   "ordinary_trips": 0,
+   "false_alarms_per_trip_forecast": null,
+   "alerts_per_hour_forecast": null,
+   "trips_with_alarm_forecast": null,
+   "false_alarms_per_trip_persist": null,
+   "alerts_per_hour_persist": null,
+   "trips_with_alarm_persist": null,
+   "false_alarms_per_trip_fixed": null,
+   "alerts_per_hour_fixed": null,
+   "trips_with_alarm_fixed": null
+  }
+ },
+ "noted_events": {
+  "status": "not available - no trip-notes file was given"
+ },
+ "timing_s": {
+  "fit_median": 0.1998107919935137,
+  "fit_max": 0.7550029580015689,
+  "score_median": 0.012744458159431815,
+  "score_max": 0.045855707954615355,
+  "n": 165
+ },
+ "runtime_s": 38.8
+}
